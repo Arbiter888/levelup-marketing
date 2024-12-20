@@ -60,7 +60,7 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
             <div className="inline-block p-3 bg-[#E94E87]/10 rounded-full mb-3 md:mb-4">
               <Mail className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
             </div>
-            <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Professional Email Templates</h3>
+            <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Instant Email Generation</h3>
             <p className="text-sm md:text-base text-muted-foreground">
               Create beautiful, engaging email campaigns with AI-powered content generation and professional templates
             </p>
@@ -80,9 +80,9 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
             <div className="inline-block p-3 bg-[#E94E87]/10 rounded-full mb-3 md:mb-4">
               <MessageSquare className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
             </div>
-            <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Customer Engagement</h3>
+            <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">AI Reservation Agent</h3>
             <p className="text-sm md:text-base text-muted-foreground">
-              Keep your customers coming back with personalized promotions and special offers delivered straight to their inbox
+              Let our AI assistant handle reservation inquiries 24/7, providing instant responses to your customers
             </p>
           </div>
         </motion.div>
@@ -95,17 +95,17 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
         >
           <div className="flex items-center justify-center gap-2 md:gap-3 mb-4 md:mb-6">
             <Bot className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
-            <h2 className="text-xl md:text-2xl font-bold">Try Our Email Marketing Demo</h2>
+            <h2 className="text-xl md:text-2xl font-bold">Try Our AI Reservation Agent</h2>
           </div>
           <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6">
-            See how our AI-powered email marketing system can help you create engaging campaigns that bring customers back to your restaurant.
+            Experience how our AI-powered reservation agent can help you manage bookings efficiently and provide instant responses to your customers.
           </p>
           <Button
             onClick={onSurveyDemo}
             className="bg-[#E94E87] hover:bg-[#E94E87]/90 text-white font-semibold w-full md:w-auto rounded-xl"
           >
-            Create Your First Campaign
-            <Mail className="ml-2 h-4 w-4 md:h-5 md:w-5" />
+            Chat with AI Agent
+            <MessageSquare className="ml-2 h-4 w-4 md:h-5 md:w-5" />
           </Button>
         </motion.div>
       </div>
