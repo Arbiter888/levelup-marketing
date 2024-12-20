@@ -4,7 +4,6 @@ import { EmailContent } from "../email/EmailContent";
 interface EmailPreviewStepProps {
   emailCopy: string;
   isGenerating: boolean;
-  onPreviewEmail: () => void;
   restaurantName?: string;
   websiteUrl?: string;
   facebookUrl?: string;
@@ -12,6 +11,8 @@ interface EmailPreviewStepProps {
   phoneNumber?: string;
   googleMapsUrl?: string;
   uniqueCode?: string | null;
+  uniqueReward?: string; // Add uniqueReward prop
+  onPreviewEmail?: () => void;
 }
 
 export const EmailPreviewStep = ({ 
@@ -24,7 +25,8 @@ export const EmailPreviewStep = ({
   instagramUrl,
   phoneNumber,
   googleMapsUrl,
-  uniqueCode
+  uniqueCode,
+  uniqueReward
 }: EmailPreviewStepProps) => {
   if (!emailCopy) return null;
 
@@ -32,7 +34,7 @@ export const EmailPreviewStep = ({
     <div className="space-y-4">
       <EmailContent emailCopy={emailCopy} />
       <EmailPreviewButton 
-        onPreviewEmail={onPreviewEmail} 
+        onPreviewEmail={onPreviewEmail || (() => {})} 
         isGenerating={isGenerating} 
       />
     </div>

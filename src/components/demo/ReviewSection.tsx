@@ -149,6 +149,7 @@ export const ReviewSection = ({
         <PromotionStep 
           promotionText={promotionText}
           onChange={setPromotionText}
+          onComplete={() => {}} // Add empty onComplete handler
         />
 
         <RewardStep 
@@ -178,7 +179,7 @@ export const ReviewSection = ({
           phoneNumber={preferences.phoneNumber}
           googleMapsUrl={googleMapsUrl}
           uniqueCode={rewardCode}
-          uniqueReward={uniqueReward}
+          uniqueReward={uniqueReward} // Add uniqueReward prop
         />
       </CardContent>
     </Card>
