@@ -6,6 +6,12 @@ interface EmailPreviewStepProps {
   isGenerating: boolean;
   onPreviewEmail: () => void;
   restaurantName?: string;
+  websiteUrl?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  phoneNumber?: string;
+  googleMapsUrl?: string;
+  uniqueCode?: string | null;
 }
 
 export const EmailPreviewStep = ({ 
@@ -13,6 +19,12 @@ export const EmailPreviewStep = ({
   isGenerating, 
   onPreviewEmail,
   restaurantName = "Our Restaurant",
+  websiteUrl,
+  facebookUrl,
+  instagramUrl,
+  phoneNumber,
+  googleMapsUrl,
+  uniqueCode
 }: EmailPreviewStepProps) => {
   if (!emailCopy) return null;
 
