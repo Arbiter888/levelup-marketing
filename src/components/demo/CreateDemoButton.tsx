@@ -81,8 +81,8 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
         throw error;
       }
 
-      const websiteUrl = `/demo/${uniqueSlug}`;
-      await navigator.clipboard.writeText(`${window.location.origin}${websiteUrl}`);
+      const demoUrl = `/demo/${uniqueSlug}`;
+      await navigator.clipboard.writeText(`${window.location.origin}${demoUrl}`);
 
       toast({
         title: "Website created!",
@@ -90,7 +90,7 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
       });
 
       if (onPageCreated) {
-        onPageCreated(websiteUrl);
+        onPageCreated(demoUrl);
       }
 
     } catch (error) {
