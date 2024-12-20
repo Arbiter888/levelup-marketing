@@ -45,13 +45,13 @@ export const BasicInfoStep = ({
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="contactEmail">Contact Email</Label>
+        <Label htmlFor="contactEmail">Demo Contact Email (for test emails)</Label>
         <Input
           id="contactEmail"
           type="email"
           value={contactEmail}
           onChange={(e) => setContactEmail(e.target.value)}
-          placeholder="Enter restaurant contact email"
+          placeholder="Enter email for test campaigns"
         />
       </div>
 
