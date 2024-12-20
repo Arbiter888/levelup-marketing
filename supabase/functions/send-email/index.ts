@@ -23,6 +23,7 @@ const handler = async (req: Request): Promise<Response> => {
     const emailRequest: EmailRequest = await req.json();
     console.log('Sending email with request:', emailRequest);
 
+    // For testing, we'll send from and to the verified email
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -30,8 +31,8 @@ const handler = async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "Eatup <onboarding@resend.dev>",
-        to: emailRequest.to,
+        from: "EatUP! <gjacklin225@gmail.com>",
+        to: ["gjacklin225@gmail.com"], // Always send to verified email during testing
         subject: emailRequest.subject,
         html: emailRequest.html,
       }),
