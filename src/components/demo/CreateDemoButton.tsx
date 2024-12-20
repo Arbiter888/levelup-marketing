@@ -18,7 +18,7 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const { toast } = useToast();
 
-  const handleCreateCampaignGenerator = async () => {
+  const handleCreateWebsite = async () => {
     try {
       setIsCreating(true);
       const savedPreferences = localStorage.getItem('demoPreferences');
@@ -32,7 +32,19 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
         return;
       }
 
-      const { restaurantName, googleMapsUrl, contactEmail } = JSON.parse(savedPreferences);
+      const preferences = JSON.parse(savedPreferences);
+      const { 
+        restaurantName, 
+        googleMapsUrl, 
+        contactEmail,
+        websiteUrl,
+        facebookUrl,
+        instagramUrl,
+        phoneNumber,
+        bookingUrl,
+        preferredBookingMethod 
+      } = preferences;
+
       if (!restaurantName || !googleMapsUrl) {
         toast({
           title: "Missing preferences",
@@ -45,13 +57,21 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
       const uniqueSlug = generateUniqueSlug(restaurantName);
 
       const { data, error } = await supabase
-        .from('campaign_generator_pages')
+        .from('restaurant_websites')
         .insert([
           {
             restaurant_name: restaurantName,
-            google_maps_url: googleMapsUrl,
-            contact_email: contactEmail,
             slug: uniqueSlug,
+            website_content: {
+              google_maps_url: googleMapsUrl,
+              contact_email: contactEmail,
+              website_url: websiteUrl,
+              facebook_url: facebookUrl,
+              instagram_url: instagramUrl,
+              phone_number: phoneNumber,
+              booking_url: bookingUrl,
+              preferred_booking_method: preferredBookingMethod
+            }
           }
         ])
         .select()
@@ -61,23 +81,23 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
         throw error;
       }
 
-      const lovableUrl = `https://32802680-4753-4ba5-98e8-7b0522c3f6f0.lovableproject.com/campaign/${uniqueSlug}`;
-      await navigator.clipboard.writeText(lovableUrl);
+      const websiteUrl = `/demo/${uniqueSlug}`;
+      await navigator.clipboard.writeText(`${window.location.origin}${websiteUrl}`);
 
       toast({
-        title: "Campaign generator page created!",
+        title: "Website created!",
         description: "The URL has been copied to your clipboard.",
       });
 
       if (onPageCreated) {
-        onPageCreated(`/campaign/${uniqueSlug}`);
+        onPageCreated(websiteUrl);
       }
 
     } catch (error) {
-      console.error('Error creating campaign generator:', error);
+      console.error('Error creating website:', error);
       toast({
         title: "Error",
-        description: "Failed to create campaign generator page. Please try again.",
+        description: "Failed to create website. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -87,11 +107,11 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
 
   return (
     <Button
-      onClick={handleCreateCampaignGenerator}
+      onClick={handleCreateWebsite}
       disabled={isCreating}
       className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-4 md:py-6"
     >
-      {isCreating ? "Creating..." : "Create Campaign Generator"}
+      {isCreating ? "Creating..." : "Create Micro-Website"}
       <Link2 className="ml-2 h-4 w-4 md:h-5 md:w-5" />
     </Button>
   );

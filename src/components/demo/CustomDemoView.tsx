@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { RestaurantHeader } from "./RestaurantHeader";
-import { ReviewSection } from "./ReviewSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import { AiSurveyWidget } from "./AiSurveyWidget";
+import { MicroWebsite } from "./MicroWebsite";
 import { Footer } from "@/components/Footer";
 
 interface CustomDemoViewProps {
@@ -12,47 +9,32 @@ interface CustomDemoViewProps {
 }
 
 export const CustomDemoView = ({ slug }: CustomDemoViewProps) => {
-  const [preferences, setPreferences] = useState<{
-    restaurant_name: string;
-    google_maps_url: string;
-  } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [showAiSurvey, setShowAiSurvey] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadDemoPage = async () => {
+    const loadWebsite = async () => {
       try {
         const { data, error } = await supabase
-          .from('demo_pages')
-          .select('restaurant_name, google_maps_url')
+          .from('restaurant_websites')
+          .select('*')
           .eq('slug', slug)
           .single();
 
         if (error) throw error;
-        if (data) {
-          setPreferences(data);
-          localStorage.setItem('demoPreferences', JSON.stringify({
-            restaurantName: data.restaurant_name,
-            googleMapsUrl: data.google_maps_url,
-          }));
-        } else {
+        if (!data) {
           navigate('/');
         }
       } catch (err) {
-        console.error('Error loading demo page:', err);
+        console.error('Error loading website:', err);
         navigate('/');
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadDemoPage();
+    loadWebsite();
   }, [slug, navigate]);
-
-  const handleTakeAiSurvey = () => {
-    setShowAiSurvey(true);
-  };
 
   if (isLoading) {
     return (
@@ -62,30 +44,11 @@ export const CustomDemoView = ({ slug }: CustomDemoViewProps) => {
     );
   }
 
-  if (!preferences) {
-    return null;
-  }
-
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex-grow">
-        <Card className="max-w-2xl mx-auto">
-          <CardContent className="p-6">
-            <RestaurantHeader
-              name={preferences.restaurant_name}
-              isCustomDemo={true}
-            />
-            <ReviewSection 
-              customRestaurantName={preferences.restaurant_name}
-              customGoogleMapsUrl={preferences.google_maps_url}
-              hidePreferences={true}
-              onTakeAiSurvey={handleTakeAiSurvey}
-            />
-          </CardContent>
-        </Card>
+        <MicroWebsite slug={slug} />
       </div>
-      
-      <AiSurveyWidget show={showAiSurvey} />
       <Footer />
     </div>
   );
