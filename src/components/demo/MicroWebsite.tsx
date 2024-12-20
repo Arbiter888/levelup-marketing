@@ -5,6 +5,7 @@ import { MapPin, Phone, Mail, Globe, Facebook, Instagram } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { AiFeedbackSection } from "./AiFeedbackSection";
 import { AiSurveyWidget } from "./AiSurveyWidget";
+import { ExampleReviews } from "@/components/ExampleReviews";
 
 interface WebsiteContent {
   google_maps_url: string;
@@ -55,7 +56,6 @@ export const MicroWebsite = ({ slug }: MicroWebsiteProps) => {
 
         if (error) throw error;
         if (data) {
-          // Transform the data to match our WebsiteData interface
           const transformedData: WebsiteData = {
             restaurant_name: data.restaurant_name,
             website_content: typeof data.website_content === 'string' 
@@ -185,6 +185,13 @@ export const MicroWebsite = ({ slug }: MicroWebsiteProps) => {
           </div>
 
           <AiFeedbackSection onTakeAiSurvey={handleAiBooking} />
+          
+          <div className="pt-8 border-t">
+            <h2 className="text-2xl font-semibold text-center mb-8">
+              What Our Customers Say
+            </h2>
+            <ExampleReviews />
+          </div>
         </CardContent>
       </Card>
       <AiSurveyWidget show={showAiWidget} />
