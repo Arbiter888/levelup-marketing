@@ -3,7 +3,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { RewardsSection } from "./RewardsSection";
 import { PromotionStep } from "./steps/PromotionStep";
 import { MenuUploadStep } from "./steps/MenuUploadStep";
 import { PromoPhotosStep } from "./steps/PromoPhotosStep";
@@ -258,15 +257,6 @@ export const ReviewSection = ({
           googleMapsUrl={googleMapsUrl}
           uniqueCode={rewardCode}
         />
-
-        <div className="pt-6">
-          <RewardsSection 
-            rewardCode={rewardCode} 
-            hasUploadedReceipt={!!menuData}
-            customRestaurantName={restaurantName}
-            customGoogleMapsUrl={googleMapsUrl}
-          />
-        </div>
 
         {onTakeAiSurvey && (
           <AiFeedbackSection onTakeAiSurvey={onTakeAiSurvey} />
