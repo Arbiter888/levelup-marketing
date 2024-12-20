@@ -119,8 +119,8 @@ export const ReviewSection = ({
   const handleGenerateEmail = async () => {
     try {
       setIsGenerating(true);
-      const preferences = localStorage.getItem('demoPreferences');
-      const parsedPreferences = preferences ? JSON.parse(preferences) : {};
+      const savedPreferences = localStorage.getItem('demoPreferences');
+      const parsedPreferences = savedPreferences ? JSON.parse(savedPreferences) : {};
       
       const { data, error } = await supabase.functions.invoke('generate-email', {
         body: { 
@@ -128,12 +128,12 @@ export const ReviewSection = ({
           menuUrl: menuData?.url || null,
           promoPhotos: promoPhotos,
           restaurantName: restaurantName,
-          websiteUrl: parsedPreferences.websiteUrl,
-          facebookUrl: parsedPreferences.facebookUrl,
-          instagramUrl: parsedPreferences.instagramUrl,
-          phoneNumber: parsedPreferences.phoneNumber,
-          bookingUrl: parsedPreferences.bookingUrl,
-          preferredBookingMethod: parsedPreferences.preferredBookingMethod,
+          websiteUrl: parsedPreferences.websiteUrl || '',
+          facebookUrl: parsedPreferences.facebookUrl || '',
+          instagramUrl: parsedPreferences.instagramUrl || '',
+          phoneNumber: parsedPreferences.phoneNumber || '',
+          bookingUrl: parsedPreferences.bookingUrl || '',
+          preferredBookingMethod: parsedPreferences.preferredBookingMethod || 'phone',
           googleMapsUrl: googleMapsUrl
         },
       });
@@ -236,10 +236,10 @@ export const ReviewSection = ({
           isGenerating={isGenerating}
           onPreviewEmail={handlePreviewEmail}
           restaurantName={restaurantName}
-          websiteUrl={parsedPreferences.websiteUrl}
-          facebookUrl={parsedPreferences.facebookUrl}
-          instagramUrl={parsedPreferences.instagramUrl}
-          phoneNumber={parsedPreferences.phoneNumber}
+          websiteUrl={parsedPreferences?.websiteUrl}
+          facebookUrl={parsedPreferences?.facebookUrl}
+          instagramUrl={parsedPreferences?.instagramUrl}
+          phoneNumber={parsedPreferences?.phoneNumber}
           googleMapsUrl={googleMapsUrl}
           uniqueCode={rewardCode}
         />
