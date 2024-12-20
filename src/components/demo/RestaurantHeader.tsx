@@ -30,13 +30,13 @@ export const RestaurantHeader = ({ name, isCustomDemo = false }: RestaurantHeade
       />
       <div className="text-center md:text-left">
         <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-primary via-pink-500 to-secondary bg-clip-text text-transparent">
-          Try EatUP! For Your Restaurant
+          Create Email Campaigns in Minutes
         </h1>
         <p className="text-sm md:text-base text-muted-foreground mb-2">
-          See How EatUP! Works for Your Restaurant
+          Experience How EatUP! Helps You Connect with Your Customers
         </p>
         <p className="text-sm text-muted-foreground max-w-lg">
-          Customize the demo with your restaurant's name and Google Maps link to experience the process as your customers would. Watch how they write reviews, upload receipts for rewards, and share their feedback. EatUP! boosts positive reviews, encourages loyalty, and drives repeat visits with AI-powered tools.
+          Generate professional email campaigns with AI in under a minute. Showcase your menu items, promote special offers, and drive repeat visits with beautifully crafted emails. Try our demo to see how easy it is to create engaging email content that keeps your customers coming back.
         </p>
       </div>
     </div>
