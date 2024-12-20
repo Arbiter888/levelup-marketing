@@ -53,9 +53,10 @@ export const EmailPreviewStep = ({
           <div className="p-4 bg-gray-50 rounded-lg">
             <p className="font-medium">Subject: Special Offer from {restaurantName}</p>
           </div>
-          <div className="whitespace-pre-wrap font-sans text-gray-700">
-            {formatEmailContent()}
-          </div>
+          <div 
+            className="email-preview whitespace-pre-wrap font-sans text-gray-700"
+            dangerouslySetInnerHTML={{ __html: emailCopy }}
+          />
         </div>
       </div>
       
