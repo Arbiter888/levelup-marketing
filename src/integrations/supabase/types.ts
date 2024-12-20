@@ -57,6 +57,45 @@ export type Database = {
         }
         Relationships: []
       }
+      campaign_generator_pages: {
+        Row: {
+          contact_email: string | null
+          created_at: string
+          default_campaign_settings: Json | null
+          default_theme_color: string | null
+          full_url: string | null
+          google_maps_url: string | null
+          id: string
+          restaurant_name: string
+          slug: string
+          team_access_enabled: boolean | null
+        }
+        Insert: {
+          contact_email?: string | null
+          created_at?: string
+          default_campaign_settings?: Json | null
+          default_theme_color?: string | null
+          full_url?: string | null
+          google_maps_url?: string | null
+          id?: string
+          restaurant_name: string
+          slug: string
+          team_access_enabled?: boolean | null
+        }
+        Update: {
+          contact_email?: string | null
+          created_at?: string
+          default_campaign_settings?: Json | null
+          default_theme_color?: string | null
+          full_url?: string | null
+          google_maps_url?: string | null
+          id?: string
+          restaurant_name?: string
+          slug?: string
+          team_access_enabled?: boolean | null
+        }
+        Relationships: []
+      }
       demo_pages: {
         Row: {
           contact_email: string | null

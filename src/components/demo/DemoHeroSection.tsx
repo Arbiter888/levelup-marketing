@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { Bot, Mail, Gift, MessageSquare } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { FeatureCards } from "./FeatureCards";
+import { MarketingAdvisorSection } from "./MarketingAdvisorSection";
 
 interface DemoHeroSectionProps {
   onSurveyDemo: () => void;
@@ -54,59 +54,16 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-4xl mx-auto mb-8 md:mb-12 px-2"
         >
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-lg">
-            <div className="inline-block p-3 bg-[#E94E87]/10 rounded-full mb-3 md:mb-4">
-              <Mail className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
-            </div>
-            <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Instant Email Generation</h3>
-            <p className="text-sm md:text-base text-muted-foreground">
-              Create beautiful, engaging email campaigns with AI-powered content generation and professional templates
-            </p>
-          </div>
-          
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-lg">
-            <div className="inline-block p-3 bg-[#E94E87]/10 rounded-full mb-3 md:mb-4">
-              <Gift className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
-            </div>
-            <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Smart Reward System</h3>
-            <p className="text-sm md:text-base text-muted-foreground">
-              Include unique reward codes in your emails to track and boost conversion rates from your mailing list
-            </p>
-          </div>
-          
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-lg">
-            <div className="inline-block p-3 bg-[#E94E87]/10 rounded-full mb-3 md:mb-4">
-              <MessageSquare className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
-            </div>
-            <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">AI Marketing Advisor</h3>
-            <p className="text-sm md:text-base text-muted-foreground">
-              Get personalized marketing advice and campaign suggestions from our AI advisor to maximize your email performance
-            </p>
-          </div>
+          <FeatureCards />
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg max-w-2xl mx-auto mb-8 md:mb-12"
         >
-          <div className="flex items-center justify-center gap-2 md:gap-3 mb-4 md:mb-6">
-            <Bot className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
-            <h2 className="text-xl md:text-2xl font-bold">Try Our AI Marketing Advisor</h2>
-          </div>
-          <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6">
-            Get expert marketing advice tailored to your restaurant. Our AI advisor helps you create compelling offers, optimize email campaigns, and develop effective marketing strategies to boost customer engagement.
-          </p>
-          <Button
-            onClick={onSurveyDemo}
-            className="bg-[#E94E87] hover:bg-[#E94E87]/90 text-white font-semibold w-full md:w-auto rounded-xl"
-          >
-            Chat with Marketing Advisor
-            <MessageSquare className="ml-2 h-4 w-4 md:h-5 md:w-5" />
-          </Button>
+          <MarketingAdvisorSection onMarketingAdvice={onSurveyDemo} />
         </motion.div>
       </div>
     </section>

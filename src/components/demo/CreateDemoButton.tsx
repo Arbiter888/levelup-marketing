@@ -18,7 +18,7 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const { toast } = useToast();
 
-  const handleCreateCustomDemo = async () => {
+  const handleCreateCampaignGenerator = async () => {
     try {
       setIsCreating(true);
       const savedPreferences = localStorage.getItem('demoPreferences');
@@ -45,7 +45,7 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
       const uniqueSlug = generateUniqueSlug(restaurantName);
 
       const { data, error } = await supabase
-        .from('demo_pages')
+        .from('campaign_generator_pages')
         .insert([
           {
             restaurant_name: restaurantName,
@@ -61,23 +61,23 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
         throw error;
       }
 
-      const lovableUrl = `https://32802680-4753-4ba5-98e8-7b0522c3f6f0.lovableproject.com/demo/${uniqueSlug}`;
+      const lovableUrl = `https://32802680-4753-4ba5-98e8-7b0522c3f6f0.lovableproject.com/campaign/${uniqueSlug}`;
       await navigator.clipboard.writeText(lovableUrl);
 
       toast({
-        title: "Review page created!",
+        title: "Campaign generator page created!",
         description: "The URL has been copied to your clipboard.",
       });
 
       if (onPageCreated) {
-        onPageCreated(`/demo/${uniqueSlug}`);
+        onPageCreated(`/campaign/${uniqueSlug}`);
       }
 
     } catch (error) {
-      console.error('Error creating demo:', error);
+      console.error('Error creating campaign generator:', error);
       toast({
         title: "Error",
-        description: "Failed to create review page. Please try again.",
+        description: "Failed to create campaign generator page. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -87,11 +87,11 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
 
   return (
     <Button
-      onClick={handleCreateCustomDemo}
+      onClick={handleCreateCampaignGenerator}
       disabled={isCreating}
       className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-4 md:py-6"
     >
-      {isCreating ? "Creating..." : "Create Your Review Page"}
+      {isCreating ? "Creating..." : "Create Campaign Generator"}
       <Link2 className="ml-2 h-4 w-4 md:h-5 md:w-5" />
     </Button>
   );
