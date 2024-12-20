@@ -1,4 +1,4 @@
-import { Mail, Gift, MessageSquare } from "lucide-react";
+import { Mail, Gift, Globe } from "lucide-react";
 
 export const FeatureCards = () => {
   return (
@@ -25,11 +25,11 @@ export const FeatureCards = () => {
       
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-lg">
         <div className="inline-block p-3 bg-[#E94E87]/10 rounded-full mb-3 md:mb-4">
-          <MessageSquare className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
+          <Globe className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
         </div>
-        <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">AI Marketing Advisor</h3>
+        <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Smart Micro-Websites</h3>
         <p className="text-sm md:text-base text-muted-foreground">
-          Get personalized marketing advice and campaign suggestions from our AI advisor to maximize your email performance
+          Create a stunning micro-website with integrated AI reservations that helps you take bookings 24/7 and showcase your restaurant
         </p>
       </div>
     </div>

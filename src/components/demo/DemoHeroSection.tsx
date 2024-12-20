@@ -38,7 +38,7 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-3xl md:text-5xl font-bold tracking-tight mb-4 md:mb-6 bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#1EAEDB] text-transparent bg-clip-text px-6 md:px-12 leading-tight pb-1"
         >
-          Create Your Restaurant's Micro-Website
+          Your Restaurant's Smart Online Presence
         </motion.h1>
         
         <motion.p
@@ -47,7 +47,7 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="text-base md:text-xl text-muted-foreground mb-8 md:mb-12 max-w-2xl mx-auto px-2"
         >
-          Build a beautiful, AI-powered micro-website with integrated reservations that helps you connect with customers and grow your business
+          Generate engaging email campaigns instantly, reward loyal customers automatically, and showcase your restaurant with a beautiful micro-website powered by AI reservations
         </motion.p>
 
         <motion.div

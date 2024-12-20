@@ -19,17 +19,17 @@ export const ReviewPageCreationSection = ({ restaurantName, googleMapsUrl }: Rev
             <Building2 className="h-6 w-6 md:h-8 md:w-8 text-primary" />
           </div>
           <h2 className="text-xl md:text-2xl font-bold text-gray-900">
-            Create Your Review Page
+            Create Your Restaurant's Micro-Website
           </h2>
           <p className="text-sm md:text-base text-gray-600">
-            Get started with your own personalized review collection page. Perfect for restaurants looking to gather authentic customer feedback.
+            Get started with your own personalized micro-website. Perfect for restaurants looking to showcase their menu and accept reservations online.
           </p>
           <div className="space-y-4 text-left border-t border-gray-100 pt-4 mt-4">
             <h3 className="font-semibold text-gray-800">What You'll Get:</h3>
             <ol className="space-y-3 text-sm text-gray-600">
               <li className="flex gap-2">
                 <span className="font-semibold text-primary">1.</span>
-                A custom-branded review collection page for your restaurant
+                A custom-branded micro-website for your restaurant
               </li>
               <li className="flex gap-2">
                 <span className="font-semibold text-primary">2.</span>
@@ -37,7 +37,7 @@ export const ReviewPageCreationSection = ({ restaurantName, googleMapsUrl }: Rev
               </li>
               <li className="flex gap-2">
                 <span className="font-semibold text-primary">3.</span>
-                Preview of how your review system will work
+                Integrated AI reservations agent for 24/7 bookings
               </li>
             </ol>
           </div>
