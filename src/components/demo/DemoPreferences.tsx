@@ -20,6 +20,7 @@ export const DemoPreferences = ({ onPreferencesSaved }: DemoPreferencesProps) =>
   const [phoneNumber, setPhoneNumber] = useState("");
   const [bookingUrl, setBookingUrl] = useState("");
   const [preferredBookingMethod, setPreferredBookingMethod] = useState("phone");
+  const [uniqueReward, setUniqueReward] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
@@ -37,6 +38,7 @@ export const DemoPreferences = ({ onPreferencesSaved }: DemoPreferencesProps) =>
       setPhoneNumber(preferences.phoneNumber || "");
       setBookingUrl(preferences.bookingUrl || "");
       setPreferredBookingMethod(preferences.preferredBookingMethod || "phone");
+      setUniqueReward(preferences.uniqueReward || "");
       onPreferencesSaved(preferences.restaurantName, preferences.googleMapsUrl, preferences.contactEmail || "");
     }
   }, [onPreferencesSaved]);
@@ -63,6 +65,7 @@ export const DemoPreferences = ({ onPreferencesSaved }: DemoPreferencesProps) =>
         phoneNumber,
         bookingUrl,
         preferredBookingMethod,
+        uniqueReward,
       };
       
       localStorage.setItem('demoPreferences', JSON.stringify(preferences));
@@ -165,6 +168,16 @@ export const DemoPreferences = ({ onPreferencesSaved }: DemoPreferencesProps) =>
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
           placeholder="Enter contact phone number"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="uniqueReward">Unique Reward</Label>
+        <Input
+          id="uniqueReward"
+          value={uniqueReward}
+          onChange={(e) => setUniqueReward(e.target.value)}
+          placeholder="Enter the reward (e.g., '10% off your next visit')"
         />
       </div>
 

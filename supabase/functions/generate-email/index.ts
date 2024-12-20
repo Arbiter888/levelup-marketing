@@ -24,7 +24,8 @@ serve(async (req) => {
       phoneNumber,
       bookingUrl,
       preferredBookingMethod,
-      googleMapsUrl
+      googleMapsUrl,
+      uniqueReward
     } = await req.json()
 
     const uniqueCode = nanoid(8);
@@ -113,6 +114,9 @@ serve(async (req) => {
         <div style="margin-top: 1rem; background-color: #fff; border: 2px dashed #E94E87; border-radius: 8px; padding: 1rem; text-align: center;">
           <p style="color: #E94E87; margin: 0 0 0.5rem 0; font-size: 0.9rem;">Show this code to your server on your next visit!</p>
           <p style="font-family: monospace; font-size: 1.2rem; font-weight: bold; color: #333; margin: 0;">${uniqueCode}</p>
+          ${uniqueReward ? 
+            `<p style="color: #333; margin: 0.5rem 0 0 0; font-size: 0.9rem;">Redeem for: ${uniqueReward}</p>` 
+            : ''}
         </div>
       </div>
     `;
