@@ -31,11 +31,11 @@ serve(async (req) => {
     const uniqueCode = nanoid(8);
 
     const systemMessage = `You are an expert email marketing copywriter for restaurants. 
-    Create an engaging email that highlights special offers and menu items. 
-    Use a friendly, inviting tone and include clear calls-to-action.
+    Create an engaging promotional email that highlights the special offers and menu items.
+    Use a friendly, inviting tone and focus on describing the food and experience.
     Format the response with proper HTML tags for email clients.
     Keep paragraphs short and use proper spacing.
-    Do not include any contact information or social links - these will be added separately.
+    Do not include any contact information, social links, or calls to action - these will be added separately.
     Do not mention the unique code - it will be added separately.
     Focus only on the promotional content and menu highlights.
     Use <b> tags for emphasis, not asterisks.
@@ -76,49 +76,35 @@ serve(async (req) => {
     // Add a clear divider
     emailCopy += '\n\n<hr style="border: none; border-top: 2px solid #f0f0f0; margin: 2rem 0;">'
 
-    // Add contact information and social links
-    let contactSection = `<div class="contact-section" style="margin-top: 2rem; padding: 1.5rem; background-color: #f8f9fa; border-radius: 8px;">`
-    contactSection += `<h3 style="color: #333; margin-bottom: 1rem; font-size: 1.5rem;">Visit ${restaurantName}</h3>`
-    
-    if (phoneNumber) {
-      contactSection += `<p style="margin: 0.75rem 0;"><span style="color: #E94E87;">📞</span> <a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">Call to Book: ${phoneNumber}</a></p>`
-    }
-    
-    if (googleMapsUrl) {
-      contactSection += `<p style="margin: 0.75rem 0;"><span style="color: #E94E87;">📍</span> <a href="${googleMapsUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">Find us on Google Maps</a></p>`
-    }
+    // Add the styled EatUP section with contact information
+    emailCopy += `
+      <div style="background-color: #f8f9fa; border-radius: 8px; padding: 1.5rem; margin-top: 2rem;">
+        <h3 style="color: #333; margin: 0 0 1rem 0; font-size: 1.5rem;">Visit ${restaurantName}</h3>
+        
+        <div style="margin: 1rem 0;">
+          ${phoneNumber ? 
+            `<p style="margin: 0.5rem 0;"><span style="color: #E94E87;">📞</span> <a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">Call: ${phoneNumber}</a></p>` 
+            : ''}
+          ${googleMapsUrl ? 
+            `<p style="margin: 0.5rem 0;"><span style="color: #E94E87;">📍</span> <a href="${googleMapsUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">Find us on Google Maps</a></p>`
+            : ''}
+        </div>
 
-    // Add booking information
-    if (preferredBookingMethod === 'website' && bookingUrl) {
-      contactSection += `<p style="margin: 0.75rem 0;"><span style="color: #E94E87;">🗓️</span> <a href="${bookingUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">Book a Table Online</a></p>`
-    }
+        ${(websiteUrl || facebookUrl || instagramUrl) ? 
+          `<div style="margin-top: 1rem;">
+            ${websiteUrl ? `<a href="${websiteUrl}" target="_blank" style="color: #E94E87; text-decoration: none; margin-right: 1rem;">🌐 Website</a>` : ''}
+            ${facebookUrl ? `<a href="${facebookUrl}" target="_blank" style="color: #E94E87; text-decoration: none; margin-right: 1rem;">📱 Facebook</a>` : ''}
+            ${instagramUrl ? `<a href="${instagramUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">📸 Instagram</a>` : ''}
+          </div>`
+          : ''}
 
-    // Add social media links if available
-    if (websiteUrl || facebookUrl || instagramUrl) {
-      contactSection += '<div style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">'
-      if (websiteUrl) {
-        contactSection += `<a href="${websiteUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">🌐 Website</a>`
-      }
-      if (facebookUrl) {
-        contactSection += `<a href="${facebookUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">📱 Facebook</a>`
-      }
-      if (instagramUrl) {
-        contactSection += `<a href="${instagramUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">📸 Instagram</a>`
-      }
-      contactSection += '</div>'
-    }
-
-    // Add unique code reminder in a styled box
-    contactSection += `
-      <div style="margin-top: 1.5rem; padding: 1.5rem; background-color: #fff; border-radius: 8px; border: 2px dashed #E94E87;">
-        <h4 style="color: #E94E87; margin: 0 0 0.75rem 0; font-size: 1.2rem;">Your Special Reward Code</h4>
-        <p style="font-family: monospace; font-size: 1.5rem; font-weight: bold; color: #333; margin: 0.5rem 0;">${uniqueCode}</p>
-        <p style="color: #666; font-size: 0.9rem; margin: 0.5rem 0;">Show this code to your server on your next visit to receive your special reward!</p>
+        <div style="margin-top: 1.5rem; background-color: #fff; border: 2px dashed #E94E87; border-radius: 8px; padding: 1.5rem;">
+          <h4 style="color: #E94E87; margin: 0 0 0.75rem 0; font-size: 1.2rem;">Your Special Reward Code</h4>
+          <p style="font-family: monospace; font-size: 1.5rem; font-weight: bold; color: #333; margin: 0.5rem 0;">${uniqueCode}</p>
+          <p style="color: #666; font-size: 0.9rem; margin: 0.5rem 0;">Show this code to your server on your next visit!</p>
+        </div>
       </div>
     `
-    
-    contactSection += '</div>'
-    emailCopy += contactSection
 
     return new Response(
       JSON.stringify({ emailCopy, uniqueCode }),
