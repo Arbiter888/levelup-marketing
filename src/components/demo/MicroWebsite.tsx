@@ -4,7 +4,6 @@ import { AiSurveyWidget } from "./AiSurveyWidget";
 import { HeroSection } from "./website/HeroSection";
 import { ContactSection } from "./website/ContactSection";
 import { SocialSection } from "./website/SocialSection";
-import { LocationPreview } from "./website/LocationPreview";
 import { RewardSection } from "./website/RewardSection";
 import { ExampleReviews } from "@/components/ExampleReviews";
 
@@ -91,19 +90,12 @@ export const MicroWebsite = ({ slug }: { slug: string }) => {
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-12">
         <ContactSection websiteContent={website_content} />
         
-        {website_content.google_maps_url && (
-          <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-gray-800 text-center">Location</h2>
-            <LocationPreview googleMapsUrl={website_content.google_maps_url} />
-          </div>
-        )}
+        <RewardSection uniqueReward="10% off your next visit when you dine with us" />
 
         <div className="space-y-6">
           <h2 className="text-2xl font-semibold text-gray-800 text-center">What Our Guests Say</h2>
           <ExampleReviews />
         </div>
-
-        <RewardSection uniqueReward="10% off your next visit when you dine with us" />
 
         <SocialSection websiteContent={website_content} />
       </div>
