@@ -3,6 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Mail, Globe, Facebook, Instagram } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { AiFeedbackSection } from "./AiFeedbackSection";
+import { AiSurveyWidget } from "./AiSurveyWidget";
 
 interface WebsiteContent {
   google_maps_url: string;
@@ -40,6 +42,7 @@ interface MicroWebsiteProps {
 export const MicroWebsite = ({ slug }: MicroWebsiteProps) => {
   const [websiteData, setWebsiteData] = useState<WebsiteData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showAiWidget, setShowAiWidget] = useState(false);
 
   useEffect(() => {
     const loadWebsite = async () => {
@@ -70,6 +73,10 @@ export const MicroWebsite = ({ slug }: MicroWebsiteProps) => {
 
     loadWebsite();
   }, [slug]);
+
+  const handleAiBooking = () => {
+    setShowAiWidget(true);
+  };
 
   if (isLoading) {
     return (
@@ -177,24 +184,10 @@ export const MicroWebsite = ({ slug }: MicroWebsiteProps) => {
             </div>
           </div>
 
-          {website_content.booking_url && (
-            <div className="text-center pt-6">
-              <Button 
-                asChild
-                className="bg-primary hover:bg-primary/90 text-white"
-              >
-                <a 
-                  href={website_content.booking_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Book a Table
-                </a>
-              </Button>
-            </div>
-          )}
+          <AiFeedbackSection onTakeAiSurvey={handleAiBooking} />
         </CardContent>
       </Card>
+      <AiSurveyWidget show={showAiWidget} />
     </div>
   );
 };
