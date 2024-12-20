@@ -13,24 +13,55 @@ serve(async (req) => {
   }
 
   try {
-    const { promotion, menuUrl, promoPhotos, restaurantName } = await req.json()
+    const { 
+      promotion, 
+      menuUrl, 
+      promoPhotos, 
+      restaurantName,
+      websiteUrl,
+      facebookUrl,
+      instagramUrl,
+      phoneNumber,
+      bookingUrl,
+      preferredBookingMethod,
+      googleMapsUrl
+    } = await req.json()
+
+    // Construct social media and contact section
+    let socialAndContactInfo = `\n\nConnect with us:`;
+    if (websiteUrl) socialAndContactInfo += `\n• Visit our website: ${websiteUrl}`;
+    if (facebookUrl) socialAndContactInfo += `\n• Follow us on Facebook: ${facebookUrl}`;
+    if (instagramUrl) socialAndContactInfo += `\n• Follow us on Instagram: ${instagramUrl}`;
+    
+    // Add booking information
+    let bookingInfo = `\n\nMake a reservation:`;
+    if (preferredBookingMethod === 'phone' && phoneNumber) {
+      bookingInfo += `\n• Call us at: ${phoneNumber}`;
+    } else if (preferredBookingMethod === 'website' && bookingUrl) {
+      bookingInfo += `\n• Book online: ${bookingUrl}`;
+    }
+
+    // Add Google Maps link
+    const locationInfo = `\n\nFind us:\n• Visit us on Google Maps: ${googleMapsUrl}`;
 
     // Construct the system message with email marketing expertise
     const systemMessage = `You are an expert email marketing copywriter for restaurants. 
     Create engaging, conversion-focused email copy that highlights special offers and menu items. 
     Use a friendly, inviting tone and include clear calls-to-action. 
     Format the response with HTML for better readability.
-    Include [UNIQUE_CODE] placeholder that will be replaced with an actual code.`
+    Include [UNIQUE_CODE] placeholder that will be replaced with an actual code.
+    Include the provided social media links, booking information, and location details at the bottom of the email.`
 
     // Construct the user message with available assets
-    let userMessage = `Create an email marketing message for ${restaurantName} with this promotion: ${promotion}.`
+    let userMessage = `Create an email marketing message for ${restaurantName} with this promotion: ${promotion}.`;
     if (menuUrl) {
-      userMessage += ` The restaurant has provided their menu for reference.`
+      userMessage += ` The restaurant has provided their menu for reference.`;
     }
     if (promoPhotos?.length > 0) {
-      userMessage += ` They've also provided ${promoPhotos.length} appetizing food photos to include.`
+      userMessage += ` They've also provided ${promoPhotos.length} appetizing food photos to include.`;
     }
-    userMessage += `\nMake sure to include:\n1. An attention-grabbing subject line\n2. The promotion details\n3. Terms and conditions (valid for 7 days)\n4. Clear redemption instructions using [UNIQUE_CODE]`
+    userMessage += `\n\nInclude these sections at the bottom of the email:${socialAndContactInfo}${bookingInfo}${locationInfo}`;
+    userMessage += `\n\nMake sure to include:\n1. An attention-grabbing subject line\n2. The promotion details\n3. Terms and conditions (valid for 7 days)\n4. Clear redemption instructions using [UNIQUE_CODE]`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',

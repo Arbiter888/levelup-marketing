@@ -89,25 +89,43 @@ export type Database = {
       }
       demo_preferences: {
         Row: {
+          booking_url: string | null
           contact_email: string | null
           created_at: string
+          facebook_url: string | null
           google_maps_url: string
           id: string
+          instagram_url: string | null
+          phone_number: string | null
+          preferred_booking_method: string | null
           restaurant_name: string
+          website_url: string | null
         }
         Insert: {
+          booking_url?: string | null
           contact_email?: string | null
           created_at?: string
+          facebook_url?: string | null
           google_maps_url: string
           id?: string
+          instagram_url?: string | null
+          phone_number?: string | null
+          preferred_booking_method?: string | null
           restaurant_name: string
+          website_url?: string | null
         }
         Update: {
+          booking_url?: string | null
           contact_email?: string | null
           created_at?: string
+          facebook_url?: string | null
           google_maps_url?: string
           id?: string
+          instagram_url?: string | null
+          phone_number?: string | null
+          preferred_booking_method?: string | null
           restaurant_name?: string
+          website_url?: string | null
         }
         Relationships: []
       }
