@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { PromotionStep } from "./steps/PromotionStep";
-import { RewardStep } from "./steps/RewardStep";
+import { MenuUploadStep } from "./steps/MenuUploadStep";
 import { PromoPhotosStep } from "./steps/PromoPhotosStep";
 import { EmailPreviewStep } from "./steps/EmailPreviewStep";
+import { DemoPreferences } from "./DemoPreferences";
+import { AiFeedbackSection } from "./AiFeedbackSection";
 import { GenerateEmailButton } from "./email-marketing/GenerateEmailButton";
 import { nanoid } from 'nanoid';
 
@@ -23,7 +26,6 @@ interface DemoPreferences {
   phoneNumber?: string;
   bookingUrl?: string;
   preferredBookingMethod?: string;
-  uniqueReward?: string;
 }
 
 export const ReviewSection = ({ 
@@ -34,8 +36,8 @@ export const ReviewSection = ({
 }: ReviewSectionProps) => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [promotionText, setPromotionText] = useState("");
-  const [uniqueReward, setUniqueReward] = useState("");
   const [emailCopy, setEmailCopy] = useState("");
+  const [menuData, setMenuData] = useState<any>(null);
   const [promoPhotos, setPromoPhotos] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [rewardCode, setRewardCode] = useState<string | null>(null);
@@ -50,6 +52,48 @@ export const ReviewSection = ({
       setPreferences(JSON.parse(savedPreferences));
     }
   }, []);
+
+  const handlePreferencesSaved = (name: string, url: string) => {
+    setRestaurantName(name);
+    setGoogleMapsUrl(url);
+  };
+
+  const handleMenuUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsAnalyzing(true);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${crypto.randomUUID()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('restaurant_menus')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('restaurant_menus')
+        .getPublicUrl(filePath);
+
+      setMenuData({ url: publicUrl });
+      toast({
+        title: "✅ Menu Added!",
+        description: "Menu uploaded successfully.",
+      });
+    } catch (error) {
+      console.error('Error uploading menu:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload menu. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   const handlePromoPhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -95,6 +139,7 @@ export const ReviewSection = ({
       const { data, error } = await supabase.functions.invoke('generate-email', {
         body: { 
           promotion: promotionText,
+          menuUrl: menuData?.url || null,
           promoPhotos: promoPhotos,
           restaurantName: restaurantName,
           websiteUrl: preferences.websiteUrl || '',
@@ -103,8 +148,7 @@ export const ReviewSection = ({
           phoneNumber: preferences.phoneNumber || '',
           bookingUrl: preferences.bookingUrl || '',
           preferredBookingMethod: preferences.preferredBookingMethod || 'phone',
-          googleMapsUrl: googleMapsUrl,
-          uniqueReward: uniqueReward
+          googleMapsUrl: googleMapsUrl
         },
       });
 
@@ -128,9 +172,40 @@ export const ReviewSection = ({
     }
   };
 
+  const handlePreviewEmail = () => {
+    const uniqueCode = nanoid(8);
+    setRewardCode(uniqueCode);
+    
+    const emailBody = emailCopy.replace('[UNIQUE_CODE]', uniqueCode);
+    navigator.clipboard.writeText(emailBody);
+    
+    toast({
+      title: "Email preview ready!",
+      description: "Opening email preview with your content.",
+    });
+
+    // Create email preview
+    const recipients = ['preview@eatup.co'];
+    const subject = encodeURIComponent(`${restaurantName} - Special Offer`);
+    const body = encodeURIComponent(emailBody);
+    const mailtoLink = `mailto:${recipients.join(',')}?subject=${subject}&body=${body}`;
+    window.location.href = mailtoLink;
+  };
+
+  const handleStep1Complete = () => {
+    toast({
+      title: "✅ Step 1 Complete!",
+      description: "Great! Now you can add your menu and promotional photos.",
+    });
+  };
+
   return (
     <Card>
       <CardContent className="space-y-8 pt-6">
+        {!hidePreferences && (
+          <DemoPreferences onPreferencesSaved={handlePreferencesSaved} />
+        )}
+        
         <div className="text-center">
           <div className="space-y-2">
             <p className="text-lg font-medium text-primary">
@@ -138,8 +213,8 @@ export const ReviewSection = ({
             </p>
             <div className="text-gray-600">
               <p>Create an engaging email campaign in 3 simple steps:</p>
-              <p>1. Share your promotion details</p>
-              <p>2. Set your customer reward</p>
+              <p>1. Share your promotion or menu highlights</p>
+              <p>2. Upload your latest menu</p>
               <p>3. Add appetizing food photos</p>
               <p className="text-primary mt-2">Preview your email and start engaging with your customers!</p>
             </div>
@@ -149,12 +224,13 @@ export const ReviewSection = ({
         <PromotionStep 
           promotionText={promotionText}
           onChange={setPromotionText}
-          onComplete={() => {}} // Add empty onComplete handler
+          onComplete={handleStep1Complete}
         />
 
-        <RewardStep 
-          uniqueReward={uniqueReward}
-          onChange={setUniqueReward}
+        <MenuUploadStep 
+          isAnalyzing={isAnalyzing}
+          menuData={menuData}
+          onFileSelect={handleMenuUpload}
         />
 
         <PromoPhotosStep 
@@ -172,6 +248,7 @@ export const ReviewSection = ({
         <EmailPreviewStep 
           emailCopy={emailCopy}
           isGenerating={isGenerating}
+          onPreviewEmail={handlePreviewEmail}
           restaurantName={restaurantName}
           websiteUrl={preferences.websiteUrl}
           facebookUrl={preferences.facebookUrl}
@@ -179,8 +256,11 @@ export const ReviewSection = ({
           phoneNumber={preferences.phoneNumber}
           googleMapsUrl={googleMapsUrl}
           uniqueCode={rewardCode}
-          uniqueReward={uniqueReward} // Add uniqueReward prop
         />
+
+        {onTakeAiSurvey && (
+          <AiFeedbackSection onTakeAiSurvey={onTakeAiSurvey} />
+        )}
       </CardContent>
     </Card>
   );
