@@ -4,7 +4,7 @@ import { Gift } from "lucide-react";
 interface PromotionStepProps {
   promotionText: string;
   onChange: (value: string) => void;
-  onComplete: () => void;
+  onComplete?: () => void;  // Made optional with ?
 }
 
 export const PromotionStep = ({ promotionText, onChange, onComplete }: PromotionStepProps) => {
@@ -18,7 +18,7 @@ export const PromotionStep = ({ promotionText, onChange, onComplete }: Promotion
         value={promotionText}
         onChange={(e) => {
           onChange(e.target.value);
-          if (e.target.value.trim().length > 0) {
+          if (onComplete && e.target.value.trim().length > 0) {
             onComplete();
           }
         }}

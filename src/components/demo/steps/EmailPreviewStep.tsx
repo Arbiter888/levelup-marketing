@@ -12,6 +12,7 @@ interface EmailPreviewStepProps {
   phoneNumber?: string;
   googleMapsUrl?: string;
   uniqueCode?: string | null;
+  uniqueReward?: string;
 }
 
 export const EmailPreviewStep = ({ 
@@ -24,7 +25,8 @@ export const EmailPreviewStep = ({
   instagramUrl,
   phoneNumber,
   googleMapsUrl,
-  uniqueCode
+  uniqueCode,
+  uniqueReward
 }: EmailPreviewStepProps) => {
   if (!emailCopy) return null;
 
