@@ -11,6 +11,7 @@ interface EmailPreviewStepProps {
   instagramUrl?: string;
   phoneNumber?: string;
   googleMapsUrl?: string;
+  uniqueCode?: string;
 }
 
 export const EmailPreviewStep = ({ 
@@ -23,6 +24,7 @@ export const EmailPreviewStep = ({
   instagramUrl,
   phoneNumber,
   googleMapsUrl,
+  uniqueCode,
 }: EmailPreviewStepProps) => {
   if (!emailCopy) return null;
 
@@ -41,6 +43,16 @@ export const EmailPreviewStep = ({
         </div>
       </div>
       
+      {uniqueCode && (
+        <div className="p-4 bg-pink-50 border-2 border-dashed border-primary rounded-lg text-center">
+          <p className="text-sm text-gray-600 mb-2">Your Unique Reward Code:</p>
+          <p className="font-mono text-xl font-bold text-primary">{uniqueCode}</p>
+          <p className="text-sm text-gray-500 mt-2">
+            Show this code to your server on your next visit!
+          </p>
+        </div>
+      )}
+      
       <Button
         onClick={onPreviewEmail}
         disabled={isGenerating}
@@ -50,7 +62,7 @@ export const EmailPreviewStep = ({
         <span>Open Email Preview</span>
       </Button>
 
-      <div className="flex gap-2 justify-center">
+      <div className="flex flex-wrap gap-2 justify-center">
         {websiteUrl && (
           <Button variant="outline" size="sm" onClick={() => window.open(websiteUrl, '_blank')}>
             <Link className="h-4 w-4 mr-1" />

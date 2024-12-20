@@ -119,18 +119,29 @@ export const ReviewSection = ({
   const handleGenerateEmail = async () => {
     try {
       setIsGenerating(true);
+      const preferences = localStorage.getItem('demoPreferences');
+      const parsedPreferences = preferences ? JSON.parse(preferences) : {};
+      
       const { data, error } = await supabase.functions.invoke('generate-email', {
         body: { 
           promotion: promotionText,
           menuUrl: menuData?.url || null,
           promoPhotos: promoPhotos,
-          restaurantName: restaurantName
+          restaurantName: restaurantName,
+          websiteUrl: parsedPreferences.websiteUrl,
+          facebookUrl: parsedPreferences.facebookUrl,
+          instagramUrl: parsedPreferences.instagramUrl,
+          phoneNumber: parsedPreferences.phoneNumber,
+          bookingUrl: parsedPreferences.bookingUrl,
+          preferredBookingMethod: parsedPreferences.preferredBookingMethod,
+          googleMapsUrl: googleMapsUrl
         },
       });
 
       if (error) throw error;
       
       setEmailCopy(data.emailCopy);
+      setRewardCode(data.uniqueCode);
       toast({
         title: "✅ Email Generated!",
         description: "Your email has been professionally crafted.",
@@ -224,6 +235,13 @@ export const ReviewSection = ({
           emailCopy={emailCopy}
           isGenerating={isGenerating}
           onPreviewEmail={handlePreviewEmail}
+          restaurantName={restaurantName}
+          websiteUrl={parsedPreferences.websiteUrl}
+          facebookUrl={parsedPreferences.facebookUrl}
+          instagramUrl={parsedPreferences.instagramUrl}
+          phoneNumber={parsedPreferences.phoneNumber}
+          googleMapsUrl={googleMapsUrl}
+          uniqueCode={rewardCode}
         />
 
         <div className="pt-6">

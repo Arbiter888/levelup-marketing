@@ -40,7 +40,8 @@ serve(async (req) => {
     Create content that looks like a proper marketing email.
     Use <b> tags for emphasis, not asterisks.
     Format phone numbers and links as clickable elements.
-    Include proper spacing between sections.`
+    Include proper spacing between sections.
+    Make sure to mention that customers should show the unique code to their server to receive their special reward.`
 
     let userMessage = `Create an email marketing message for ${restaurantName} with this promotion: ${promotion}.`;
     if (menuUrl) {
@@ -77,31 +78,45 @@ serve(async (req) => {
     }
 
     // Add contact information and social links
-    let contactSection = '\n\n<div class="contact-section">'
-    contactSection += `<b>Visit ${restaurantName}</b><br/>`
+    let contactSection = '\n\n<div class="contact-section" style="margin-top: 2rem; padding: 1rem; background-color: #f8f9fa; border-radius: 8px;">'
+    contactSection += `<h3 style="color: #333; margin-bottom: 1rem;">Visit ${restaurantName}</h3>`
     
     if (phoneNumber) {
-      contactSection += `<p>📞 <a href="tel:${phoneNumber}" class="cta-button">Call to Book: ${phoneNumber}</a></p>`
+      contactSection += `<p>📞 <a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">Call to Book: ${phoneNumber}</a></p>`
     }
     
     if (googleMapsUrl) {
-      contactSection += `<p>📍 <a href="${googleMapsUrl}" target="_blank">Find us on Google Maps</a></p>`
+      contactSection += `<p>📍 <a href="${googleMapsUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">Find us on Google Maps</a></p>`
+    }
+
+    // Add booking information
+    if (preferredBookingMethod === 'website' && bookingUrl) {
+      contactSection += `<p>🗓️ <a href="${bookingUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">Book a Table Online</a></p>`
     }
 
     // Add social media links if available
     if (websiteUrl || facebookUrl || instagramUrl) {
-      contactSection += '<div class="social-links">'
+      contactSection += '<div class="social-links" style="margin-top: 1rem;">'
       if (websiteUrl) {
-        contactSection += `<a href="${websiteUrl}" target="_blank">🌐 Website</a>`
+        contactSection += `<a href="${websiteUrl}" target="_blank" style="color: #E94E87; text-decoration: none; margin-right: 1rem;">🌐 Website</a>`
       }
       if (facebookUrl) {
-        contactSection += `<a href="${facebookUrl}" target="_blank">📱 Facebook</a>`
+        contactSection += `<a href="${facebookUrl}" target="_blank" style="color: #E94E87; text-decoration: none; margin-right: 1rem;">📱 Facebook</a>`
       }
       if (instagramUrl) {
-        contactSection += `<a href="${instagramUrl}" target="_blank">📸 Instagram</a>`
+        contactSection += `<a href="${instagramUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">📸 Instagram</a>`
       }
       contactSection += '</div>'
     }
+
+    // Add unique code reminder
+    contactSection += `
+      <div style="margin-top: 1.5rem; padding: 1rem; background-color: #fff; border-radius: 8px; border: 2px dashed #E94E87;">
+        <h4 style="color: #E94E87; margin-bottom: 0.5rem;">Your Special Reward Code</h4>
+        <p style="font-family: monospace; font-size: 1.2rem; font-weight: bold; color: #333;">${uniqueCode}</p>
+        <p style="color: #666; font-size: 0.9rem;">Show this code to your server on your next visit to receive your special reward!</p>
+      </div>
+    `
     
     contactSection += '</div>'
     emailCopy += contactSection
