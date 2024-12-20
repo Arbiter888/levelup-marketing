@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -20,6 +20,15 @@ interface ReviewSectionProps {
   onTakeAiSurvey?: () => void;
 }
 
+interface DemoPreferences {
+  websiteUrl?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  phoneNumber?: string;
+  bookingUrl?: string;
+  preferredBookingMethod?: string;
+}
+
 export const ReviewSection = ({ 
   customRestaurantName,
   customGoogleMapsUrl,
@@ -35,7 +44,15 @@ export const ReviewSection = ({
   const [rewardCode, setRewardCode] = useState<string | null>(null);
   const [googleMapsUrl, setGoogleMapsUrl] = useState(customGoogleMapsUrl || "https://maps.app.goo.gl/Nx23mQHet4TBfctJ6");
   const [restaurantName, setRestaurantName] = useState(customRestaurantName || "The Local Kitchen & Bar");
+  const [preferences, setPreferences] = useState<DemoPreferences>({});
   const { toast } = useToast();
+
+  useEffect(() => {
+    const savedPreferences = localStorage.getItem('demoPreferences');
+    if (savedPreferences) {
+      setPreferences(JSON.parse(savedPreferences));
+    }
+  }, []);
 
   const handlePreferencesSaved = (name: string, url: string) => {
     setRestaurantName(name);
@@ -119,8 +136,6 @@ export const ReviewSection = ({
   const handleGenerateEmail = async () => {
     try {
       setIsGenerating(true);
-      const savedPreferences = localStorage.getItem('demoPreferences');
-      const parsedPreferences = savedPreferences ? JSON.parse(savedPreferences) : {};
       
       const { data, error } = await supabase.functions.invoke('generate-email', {
         body: { 
@@ -128,12 +143,12 @@ export const ReviewSection = ({
           menuUrl: menuData?.url || null,
           promoPhotos: promoPhotos,
           restaurantName: restaurantName,
-          websiteUrl: parsedPreferences.websiteUrl || '',
-          facebookUrl: parsedPreferences.facebookUrl || '',
-          instagramUrl: parsedPreferences.instagramUrl || '',
-          phoneNumber: parsedPreferences.phoneNumber || '',
-          bookingUrl: parsedPreferences.bookingUrl || '',
-          preferredBookingMethod: parsedPreferences.preferredBookingMethod || 'phone',
+          websiteUrl: preferences.websiteUrl || '',
+          facebookUrl: preferences.facebookUrl || '',
+          instagramUrl: preferences.instagramUrl || '',
+          phoneNumber: preferences.phoneNumber || '',
+          bookingUrl: preferences.bookingUrl || '',
+          preferredBookingMethod: preferences.preferredBookingMethod || 'phone',
           googleMapsUrl: googleMapsUrl
         },
       });
@@ -236,10 +251,10 @@ export const ReviewSection = ({
           isGenerating={isGenerating}
           onPreviewEmail={handlePreviewEmail}
           restaurantName={restaurantName}
-          websiteUrl={parsedPreferences?.websiteUrl}
-          facebookUrl={parsedPreferences?.facebookUrl}
-          instagramUrl={parsedPreferences?.instagramUrl}
-          phoneNumber={parsedPreferences?.phoneNumber}
+          websiteUrl={preferences.websiteUrl}
+          facebookUrl={preferences.facebookUrl}
+          instagramUrl={preferences.instagramUrl}
+          phoneNumber={preferences.phoneNumber}
           googleMapsUrl={googleMapsUrl}
           uniqueCode={rewardCode}
         />
