@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Robot } from "lucide-react";
+import { Bot } from "lucide-react";
 
 interface HeroSectionProps {
   restaurantName: string;
@@ -19,7 +19,7 @@ export const HeroSection = ({ restaurantName, onBookTable }: HeroSectionProps) =
             className="bg-white text-primary hover:bg-white/90 flex items-center gap-2"
             onClick={onBookTable}
           >
-            <Robot className="w-5 h-5" />
+            <Bot className="w-5 h-5" />
             Book a Table with our AI Assistant
           </Button>
           <p className="text-sm text-white/80 max-w-md">
