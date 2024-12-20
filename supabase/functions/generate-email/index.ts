@@ -27,19 +27,22 @@ serve(async (req) => {
       googleMapsUrl
     } = await req.json()
 
-    // Generate a unique code for the preview
     const uniqueCode = nanoid(8);
 
     const systemMessage = `You are an expert email marketing copywriter for restaurants. 
     Create an engaging promotional email that highlights the special offers and menu items.
-    Use a friendly, inviting tone and focus on describing the food and experience.
-    Format the response with proper HTML tags for email clients.
-    Keep paragraphs short and use proper spacing.
-    Do not include any contact information, social links, or calls to action - these will be added separately.
-    Do not mention the unique code - it will be added separately.
-    Focus only on the promotional content and menu highlights.
-    Use <b> tags for emphasis, not asterisks.
-    Keep the content concise and focused on the promotion.`
+    
+    Important formatting rules:
+    1. Write in plain text without any HTML tags
+    2. Use simple paragraphs with line breaks between them
+    3. Keep paragraphs short and focused
+    4. Don't include any formatting instructions or symbols
+    5. Don't mention contact information or social links
+    6. Don't include the unique code
+    7. Focus only on the promotional content and menu highlights
+    8. Keep the content concise and engaging
+    9. Don't include any calls to action like "Reserve now" or "Book a table"
+    10. Don't use asterisks or other special characters for emphasis`;
 
     let userMessage = `Create an email marketing message for ${restaurantName} with this promotion: ${promotion}.`;
     if (menuUrl) {
@@ -62,21 +65,26 @@ serve(async (req) => {
     })
 
     const data = await response.json()
-    let emailCopy = data.choices[0].message.content
+    
+    // Process the raw text into properly formatted paragraphs
+    const rawContent = data.choices[0].message.content;
+    const paragraphs = rawContent.split('\n\n').filter(p => p.trim());
+    
+    // Convert paragraphs into styled divs
+    let emailCopy = paragraphs.map(paragraph => 
+      `<div style="margin-bottom: 1rem; line-height: 1.6; color: #333333;">${paragraph}</div>`
+    ).join('\n');
 
-    // Add photo HTML if photos are provided
+    // Add photo section if photos are provided
     if (promoPhotos?.length > 0) {
-      emailCopy += '\n\n<div style="margin: 2rem 0; text-align: center;">'
+      emailCopy += '\n\n<div style="margin: 2rem 0; text-align: center;">';
       emailCopy += promoPhotos.map((photo: string) => 
         `<img src="${photo}" alt="Food at ${restaurantName}" style="max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px;">`
-      ).join('\n')
-      emailCopy += '</div>'
+      ).join('\n');
+      emailCopy += '</div>';
     }
 
-    // Add a clear divider
-    emailCopy += '\n\n<hr style="border: none; border-top: 2px solid #f0f0f0; margin: 2rem 0;">'
-
-    // Add the styled EatUP section with contact information
+    // Add styled contact section
     emailCopy += `
       <div style="background-color: #f8f9fa; border-radius: 8px; padding: 1.5rem; margin-top: 2rem;">
         <h3 style="color: #333; margin: 0 0 1rem 0; font-size: 1.5rem;">Visit ${restaurantName}</h3>
@@ -104,7 +112,7 @@ serve(async (req) => {
           <p style="color: #666; font-size: 0.9rem; margin: 0.5rem 0;">Show this code to your server on your next visit!</p>
         </div>
       </div>
-    `
+    `;
 
     return new Response(
       JSON.stringify({ emailCopy, uniqueCode }),
