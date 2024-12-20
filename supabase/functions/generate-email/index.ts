@@ -31,25 +31,21 @@ serve(async (req) => {
     const uniqueCode = nanoid(8);
 
     const systemMessage = `You are an expert email marketing copywriter for restaurants. 
-    Create a concise, engaging promotional email that highlights the special offers and menu items.
+    Create a compelling, engaging promotional email that highlights the special offers and menu items.
     
     Important formatting rules:
-    1. Always start with exactly "Dear Food Lover," and nothing else before the main content
-    2. Write in plain text without any HTML tags
-    3. Use simple paragraphs with line breaks between them
-    4. Keep paragraphs short and focused (2-3 sentences max)
-    5. Don't include any formatting instructions or symbols
-    6. Don't mention contact information or social links
-    7. Don't include the unique code
-    8. Focus only on the promotional content and menu highlights
-    9. Keep the content brief and engaging (max 3-4 paragraphs)
-    10. Don't include any calls to action
-    11. Don't use asterisks or other special characters for emphasis`;
+    1. Start with "Dear Food Lover," on its own line, followed by TWO blank lines
+    2. Write in clear, well-spaced paragraphs with line breaks between them
+    3. Keep paragraphs focused and engaging (2-3 sentences max)
+    4. Focus on creating excitement about the promotion
+    5. Don't mention contact information or social links
+    6. Don't include any formatting instructions
+    7. Don't mention the unique code or reward - these will be added separately
+    8. Use proper paragraph spacing with blank lines between paragraphs
+    9. Keep the content brief but impactful (2-3 paragraphs max)
+    10. End with a clear but subtle call to action`;
 
-    let userMessage = `Create a brief, focused email marketing message for ${restaurantName} with this promotion: ${promotion}.`;
-    if (menuUrl) {
-      userMessage += ` The restaurant has provided their menu for reference.`;
-    }
+    let userMessage = `Create an enticing email marketing message for ${restaurantName} promoting: ${promotion}.`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -67,14 +63,13 @@ serve(async (req) => {
     })
 
     const data = await response.json()
-    console.log('OpenAI response:', data);
     
-    let emailCopy = '<div style="margin-bottom: 2rem; line-height: 1.6; color: #333333;">';
-    emailCopy += data.choices[0].message.content;
+    let emailCopy = '<div style="margin-bottom: 2rem; line-height: 1.8; color: #333333; font-size: 16px;">';
+    emailCopy += data.choices[0].message.content.replace(/\n\n/g, '</p><p style="margin: 1.5rem 0;">');
     emailCopy += '</div>';
 
     if (promoPhotos?.length > 0) {
-      emailCopy += '\n\n<div style="margin: 2rem 0; text-align: center;">';
+      emailCopy += '<div style="margin: 2rem 0; text-align: center;">';
       emailCopy += promoPhotos.map((photo: string) => 
         `<img src="${photo}" alt="Food at ${restaurantName}" style="max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px;">`
       ).join('\n');
@@ -103,10 +98,10 @@ serve(async (req) => {
           : ''}
 
         <div style="margin-top: 1rem; background-color: #fff; border: 2px dashed #E94E87; border-radius: 8px; padding: 1rem; text-align: center;">
-          <p style="color: #E94E87; margin: 0 0 0.5rem 0; font-size: 0.9rem;">Show this code to your server on your next visit!</p>
+          <p style="color: #E94E87; margin: 0 0 0.5rem 0; font-size: 0.9rem;">Your Special Reward Code</p>
           <p style="font-family: monospace; font-size: 1.2rem; font-weight: bold; color: #333; margin: 0;">${uniqueCode}</p>
           ${uniqueReward ? 
-            `<p style="color: #333; margin: 0.5rem 0 0 0; font-size: 0.9rem;">Redeem for: ${uniqueReward}</p>` 
+            `<p style="color: #333; margin: 0.5rem 0 0 0; font-size: 0.9rem;">Present this code to redeem: ${uniqueReward}</p>` 
             : ''}
         </div>
       </div>
