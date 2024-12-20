@@ -17,8 +17,26 @@
   max-width: 100%;
   height: auto;
   margin: 1rem 0;
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.email-preview .dish-photo {
+  margin-bottom: 2rem;
+}
+
+.email-preview .dish-caption {
+  text-align: center;
+  color: #4B5563;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+.email-preview .photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
 }
 
 .email-preview a {
@@ -48,6 +66,27 @@
   color: #1F2937;
 }
 
+.email-preview .reward-section {
+  background: linear-gradient(135deg, #FDF2F8 0%, #FCE7F3 100%);
+  border: 1px solid #FBCFE8;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.email-preview .reward-code {
+  font-family: monospace;
+  background: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  color: #E94E87;
+  display: inline-block;
+  margin: 0.5rem 0;
+  border: 1px solid #FBCFE8;
+}
+
 .email-preview .cta-button {
   display: inline-block;
   background-color: #E94E87;
@@ -71,6 +110,7 @@
   padding: 1.5rem;
   border-radius: 1rem;
   margin-top: 2rem;
+  border: 1px solid #E5E7EB;
 }
 
 .email-preview .social-links {
@@ -86,18 +126,8 @@
   border-radius: 1rem 1rem 0 0;
 }
 
-/* Global styles for inputs and buttons */
-input,
-textarea,
-select,
-button {
-  border-radius: 1rem !important;
-}
-
-.rounded-xl {
-  border-radius: 1rem !important;
-}
-
-.rounded-2xl {
-  border-radius: 1.5rem !important;
+.email-preview .divider {
+  height: 1px;
+  background: #E5E7EB;
+  margin: 2rem 0;
 }
