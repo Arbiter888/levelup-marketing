@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Bot, Star, Gift, MessageSquare } from "lucide-react";
+import { Bot, Mail, Gift, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface DemoHeroSectionProps {
@@ -38,7 +38,7 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-3xl md:text-5xl font-bold tracking-tight mb-4 md:mb-6 bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#1EAEDB] text-transparent bg-clip-text px-6 md:px-12 leading-tight pb-1"
         >
-          Transform Your Restaurant's Marketing Strategy
+          Transform Your Restaurant's Email Marketing
         </motion.h1>
         
         <motion.p
@@ -47,7 +47,7 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="text-base md:text-xl text-muted-foreground mb-8 md:mb-12 max-w-2xl mx-auto px-2"
         >
-          Boost positive reviews, increase customer retention, and streamline reservations with our innovative AI-powered platform.
+          Create engaging email campaigns that drive repeat visits, increase customer loyalty, and boost your restaurant's revenue
         </motion.p>
 
         <motion.div
@@ -58,11 +58,11 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
         >
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-lg">
             <div className="inline-block p-3 bg-[#E94E87]/10 rounded-full mb-3 md:mb-4">
-              <Star className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
+              <Mail className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
             </div>
-            <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Positive Review Acceleration</h3>
+            <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Professional Email Templates</h3>
             <p className="text-sm md:text-base text-muted-foreground">
-              Turn happy customers into brand advocates with AI-enhanced review generation and instant reward incentives
+              Create beautiful, engaging email campaigns with AI-powered content generation and professional templates
             </p>
           </div>
           
@@ -70,9 +70,9 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
             <div className="inline-block p-3 bg-[#E94E87]/10 rounded-full mb-3 md:mb-4">
               <Gift className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
             </div>
-            <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Revisit Rewards</h3>
+            <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Smart Reward System</h3>
             <p className="text-sm md:text-base text-muted-foreground">
-              Drive customer loyalty with our 4-visit reward program, turning first-time diners into regular patrons
+              Include unique reward codes in your emails to track and boost conversion rates from your mailing list
             </p>
           </div>
           
@@ -80,9 +80,9 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
             <div className="inline-block p-3 bg-[#E94E87]/10 rounded-full mb-3 md:mb-4">
               <MessageSquare className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
             </div>
-            <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">AI Reservation Booking</h3>
+            <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Customer Engagement</h3>
             <p className="text-sm md:text-base text-muted-foreground">
-              Let customers book tables 24/7 with our AI-powered voice booking system that handles reservations effortlessly
+              Keep your customers coming back with personalized promotions and special offers delivered straight to their inbox
             </p>
           </div>
         </motion.div>
@@ -95,17 +95,17 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
         >
           <div className="flex items-center justify-center gap-2 md:gap-3 mb-4 md:mb-6">
             <Bot className="h-6 w-6 md:h-8 md:w-8 text-[#E94E87]" />
-            <h2 className="text-xl md:text-2xl font-bold">EatUP! AI Reservation Booking</h2>
+            <h2 className="text-xl md:text-2xl font-bold">Try Our Email Marketing Demo</h2>
           </div>
           <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6">
-            Experience our conversational AI that handles table reservations 24/7, providing a seamless booking experience while your staff focuses on delivering exceptional service.
+            See how our AI-powered email marketing system can help you create engaging campaigns that bring customers back to your restaurant.
           </p>
           <Button
             onClick={onSurveyDemo}
-            className="bg-[#E94E87] hover:bg-[#E94E87]/90 text-white font-semibold w-full md:w-auto"
+            className="bg-[#E94E87] hover:bg-[#E94E87]/90 text-white font-semibold w-full md:w-auto rounded-xl"
           >
-            Try AI Booking Demo
-            <Bot className="ml-2 h-4 w-4 md:h-5 md:w-5" />
+            Create Your First Campaign
+            <Mail className="ml-2 h-4 w-4 md:h-5 md:w-5" />
           </Button>
         </motion.div>
       </div>

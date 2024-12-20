@@ -67,15 +67,13 @@ serve(async (req) => {
     const data = await response.json()
     console.log('OpenAI response:', data);
     
-    // Process the raw text into properly formatted paragraphs
-    const rawContent = data.choices[0].message.content;
-    const paragraphs = rawContent.split('\n\n').filter(p => p.trim());
-    
     // Start with the greeting
     let emailCopy = '<div style="margin-bottom: 2rem; line-height: 1.6; color: #333333;">';
     emailCopy += '<p style="font-size: 1.1rem; margin-bottom: 1rem;">Dear Food Lover,</p>';
     
     // Add the content paragraphs
+    const rawContent = data.choices[0].message.content;
+    const paragraphs = rawContent.split('\n\n').filter(p => p.trim());
     emailCopy += paragraphs.map(paragraph => 
       `<div style="margin-bottom: 1rem; line-height: 1.6; color: #333333;">${paragraph}</div>`
     ).join('\n');
@@ -90,7 +88,7 @@ serve(async (req) => {
       emailCopy += '</div>';
     }
 
-    // Add minimal contact section with reward code
+    // Add contact section with reward code and clear link indicators
     emailCopy += `
       <div style="background-color: #f8f9fa; border-radius: 8px; padding: 1.5rem; margin-top: 2rem;">
         <h3 style="color: #333; margin: 0 0 1rem 0; font-size: 1.5rem;">${restaurantName}</h3>
@@ -106,14 +104,14 @@ serve(async (req) => {
 
         ${(websiteUrl || facebookUrl || instagramUrl) ? 
           `<div style="margin: 1rem 0;">
-            ${websiteUrl ? `<a href="${websiteUrl}" target="_blank" style="color: #666; text-decoration: none; margin-right: 1rem;">Website</a>` : ''}
-            ${facebookUrl ? `<a href="${facebookUrl}" target="_blank" style="color: #666; text-decoration: none; margin-right: 1rem;">Facebook</a>` : ''}
-            ${instagramUrl ? `<a href="${instagramUrl}" target="_blank" style="color: #666; text-decoration: none;">Instagram</a>` : ''}
+            ${websiteUrl ? `<a href="${websiteUrl}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">🌐 Visit our Website</a>` : ''}
+            ${facebookUrl ? `<a href="${facebookUrl}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">👥 Follow us on Facebook</a>` : ''}
+            ${instagramUrl ? `<a href="${instagramUrl}" target="_blank" style="color: #666; text-decoration: underline;">📸 Follow us on Instagram</a>` : ''}
           </div>`
           : ''}
 
         <div style="margin-top: 1rem; background-color: #fff; border: 2px dashed #E94E87; border-radius: 8px; padding: 1rem; text-align: center;">
-          <p style="color: #E94E87; margin: 0 0 0.5rem 0; font-size: 0.9rem;">Your Special Reward Code</p>
+          <p style="color: #E94E87; margin: 0 0 0.5rem 0; font-size: 0.9rem;">Show this code to your server on your next visit!</p>
           <p style="font-family: monospace; font-size: 1.2rem; font-weight: bold; color: #333; margin: 0;">${uniqueCode}</p>
         </div>
       </div>
