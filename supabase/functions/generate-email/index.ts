@@ -15,7 +15,6 @@ serve(async (req) => {
   try {
     const { 
       promotion, 
-      menuUrl, 
       promoPhotos, 
       restaurantName,
       websiteUrl,
@@ -34,22 +33,17 @@ serve(async (req) => {
     Create a concise, engaging promotional email that highlights the special offers and menu items.
     
     Important formatting rules:
-    1. Always start with exactly "Dear Food Lover," and nothing else before the main content
-    2. Write in plain text without any HTML tags
-    3. Use simple paragraphs with line breaks between them
+    1. Start with "Dear Food Lover," on its own line
+    2. Add a blank line after the greeting
+    3. Write in plain text with proper paragraph breaks
     4. Keep paragraphs short and focused (2-3 sentences max)
-    5. Don't include any formatting instructions or symbols
+    5. Don't include any HTML tags or formatting instructions
     6. Don't mention contact information or social links
     7. Don't include the unique code
-    8. Focus only on the promotional content and menu highlights
+    8. Focus on the promotional content
     9. Keep the content brief and engaging (max 3-4 paragraphs)
-    10. Don't include any calls to action
-    11. Don't use asterisks or other special characters for emphasis`;
-
-    let userMessage = `Create a brief, focused email marketing message for ${restaurantName} with this promotion: ${promotion}.`;
-    if (menuUrl) {
-      userMessage += ` The restaurant has provided their menu for reference.`;
-    }
+    10. Use proper spacing between paragraphs
+    11. Don't use asterisks or other special characters`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -61,7 +55,7 @@ serve(async (req) => {
         model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: systemMessage },
-          { role: 'user', content: userMessage }
+          { role: 'user', content: `Create a brief, focused email marketing message for ${restaurantName} with this promotion: ${promotion}` }
         ],
       }),
     })
@@ -70,8 +64,18 @@ serve(async (req) => {
     console.log('OpenAI response:', data);
     
     let emailCopy = '<div style="margin-bottom: 2rem; line-height: 1.6; color: #333333;">';
-    emailCopy += data.choices[0].message.content;
+    emailCopy += data.choices[0].message.content.replace(/\n/g, '<br>');
     emailCopy += '</div>';
+
+    if (uniqueReward) {
+      emailCopy += `
+        <div style="margin: 2rem 0; padding: 1rem; background-color: #f8f9fa; border-radius: 8px; text-align: center;">
+          <p style="color: #E94E87; font-weight: bold; margin-bottom: 0.5rem;">Special Reward for Your Next Visit!</p>
+          <p style="margin: 0;">${uniqueReward}</p>
+          <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">Show code: ${uniqueCode}</p>
+        </div>
+      `;
+    }
 
     if (promoPhotos?.length > 0) {
       emailCopy += '\n\n<div style="margin: 2rem 0; text-align: center;">';
@@ -101,14 +105,6 @@ serve(async (req) => {
             ${instagramUrl ? `<a href="${instagramUrl}" target="_blank" style="color: #666; text-decoration: underline;">📸 Follow us on Instagram</a>` : ''}
           </div>`
           : ''}
-
-        <div style="margin-top: 1rem; background-color: #fff; border: 2px dashed #E94E87; border-radius: 8px; padding: 1rem; text-align: center;">
-          <p style="color: #E94E87; margin: 0 0 0.5rem 0; font-size: 0.9rem;">Show this code to your server on your next visit!</p>
-          <p style="font-family: monospace; font-size: 1.2rem; font-weight: bold; color: #333; margin: 0;">${uniqueCode}</p>
-          ${uniqueReward ? 
-            `<p style="color: #333; margin: 0.5rem 0 0 0; font-size: 0.9rem;">Redeem for: ${uniqueReward}</p>` 
-            : ''}
-        </div>
       </div>
     `;
 
