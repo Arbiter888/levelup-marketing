@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { RewardsSection } from "./RewardsSection";
@@ -8,8 +9,9 @@ import { MenuUploadStep } from "./steps/MenuUploadStep";
 import { PromoPhotosStep } from "./steps/PromoPhotosStep";
 import { EmailPreviewStep } from "./steps/EmailPreviewStep";
 import { DemoPreferences } from "./DemoPreferences";
-import { nanoid } from 'nanoid';
 import { AiFeedbackSection } from "./AiFeedbackSection";
+import { GenerateEmailButton } from "./email-marketing/GenerateEmailButton";
+import { nanoid } from 'nanoid';
 
 interface ReviewSectionProps {
   customRestaurantName?: string;
@@ -115,15 +117,6 @@ export const ReviewSection = ({
   };
 
   const handleGenerateEmail = async () => {
-    if (!promotionText.trim()) {
-      toast({
-        title: "Promotion required",
-        description: "Please write your promotion details before generating.",
-        variant: "destructive",
-      });
-      return;
-    }
-
     try {
       setIsGenerating(true);
       const { data, error } = await supabase.functions.invoke('generate-email', {
@@ -221,13 +214,11 @@ export const ReviewSection = ({
           onFileSelect={handlePromoPhotoUpload}
         />
 
-        <Button
-          onClick={handleGenerateEmail}
-          disabled={isGenerating || !promotionText.trim()}
-          className="w-full bg-primary hover:bg-primary/90 text-white"
-        >
-          {isGenerating ? "Generating Email..." : "Generate Email Copy"}
-        </Button>
+        <GenerateEmailButton 
+          isGenerating={isGenerating}
+          promotionText={promotionText}
+          onGenerate={handleGenerateEmail}
+        />
 
         <EmailPreviewStep 
           emailCopy={emailCopy}
