@@ -4,18 +4,33 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Mail, Globe, Facebook, Instagram } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
+interface WebsiteContent {
+  google_maps_url: string;
+  contact_email?: string;
+  website_url?: string;
+  facebook_url?: string;
+  instagram_url?: string;
+  phone_number?: string;
+  booking_url?: string;
+  preferred_booking_method?: string;
+}
+
 interface WebsiteData {
   restaurant_name: string;
-  website_content: {
-    google_maps_url: string;
-    contact_email?: string;
-    website_url?: string;
-    facebook_url?: string;
-    instagram_url?: string;
-    phone_number?: string;
-    booking_url?: string;
-    preferred_booking_method?: string;
-  };
+  website_content: WebsiteContent;
+}
+
+interface SupabaseWebsiteData {
+  restaurant_name: string;
+  website_content: string | WebsiteContent;
+  slug: string;
+  id: string;
+  created_at: string;
+  theme_color: string | null;
+  contact_info: any | null;
+  menu_sections: any | null;
+  hero_image: string | null;
+  gallery: any | null;
 }
 
 interface MicroWebsiteProps {
@@ -37,7 +52,14 @@ export const MicroWebsite = ({ slug }: MicroWebsiteProps) => {
 
         if (error) throw error;
         if (data) {
-          setWebsiteData(data);
+          // Transform the data to match our WebsiteData interface
+          const transformedData: WebsiteData = {
+            restaurant_name: data.restaurant_name,
+            website_content: typeof data.website_content === 'string' 
+              ? JSON.parse(data.website_content) 
+              : data.website_content
+          };
+          setWebsiteData(transformedData);
         }
       } catch (err) {
         console.error('Error loading website:', err);
