@@ -26,35 +26,16 @@ export const EmailPreviewStep = ({
 }: EmailPreviewStepProps) => {
   if (!emailCopy) return null;
 
-  const formatEmailContent = () => {
-    let formattedEmail = emailCopy;
-    
-    // Add social links section if any social links exist
-    if (websiteUrl || facebookUrl || instagramUrl) {
-      formattedEmail += '\n\nConnect With Us:';
-      if (websiteUrl) formattedEmail += `\n• Visit our website: ${websiteUrl}`;
-      if (facebookUrl) formattedEmail += `\n• Follow us on Facebook: ${facebookUrl}`;
-      if (instagramUrl) formattedEmail += `\n• Follow us on Instagram: ${instagramUrl}`;
-    }
-
-    // Add contact and location section
-    formattedEmail += '\n\nVisit Us:';
-    if (phoneNumber) formattedEmail += `\n• Call to book: ${phoneNumber}`;
-    if (googleMapsUrl) formattedEmail += `\n• Find us on Google Maps: ${googleMapsUrl}`;
-
-    return formattedEmail;
-  };
-
   return (
     <div className="space-y-4">
       <div className="p-6 bg-white rounded-xl border border-gray-200">
-        <h3 className="font-semibold text-xl mb-4">Email Preview</h3>
+        <h3 className="font-semibold text-xl mb-4">Email Marketing Preview</h3>
         <div className="prose max-w-none space-y-4">
           <div className="p-4 bg-gray-50 rounded-lg">
             <p className="font-medium">Subject: Special Offer from {restaurantName}</p>
           </div>
           <div 
-            className="email-preview whitespace-pre-wrap font-sans text-gray-700"
+            className="email-preview"
             dangerouslySetInnerHTML={{ __html: emailCopy }}
           />
         </div>

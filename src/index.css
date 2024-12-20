@@ -5,6 +5,12 @@
 .email-preview {
   font-family: system-ui, -apple-system, sans-serif;
   line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .email-preview img {
@@ -12,11 +18,14 @@
   height: auto;
   margin: 1rem 0;
   border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .email-preview a {
   color: #E94E87;
   text-decoration: none;
+  font-weight: 500;
+  padding: 0.25rem 0;
 }
 
 .email-preview a:hover {
@@ -25,6 +34,7 @@
 
 .email-preview p {
   margin: 1rem 0;
+  color: #374151;
 }
 
 .email-preview div {
@@ -33,4 +43,41 @@
 
 .email-preview b {
   font-weight: 600;
+  color: #1F2937;
+}
+
+.email-preview .cta-button {
+  display: inline-block;
+  background-color: #E94E87;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  margin: 1rem 0;
+  font-weight: 500;
+}
+
+.email-preview .cta-button:hover {
+  background-color: #D13D73;
+  text-decoration: none;
+}
+
+.email-preview .contact-section {
+  background-color: #F9FAFB;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin-top: 2rem;
+}
+
+.email-preview .social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.email-preview .header-image {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 0.5rem 0.5rem 0 0;
 }

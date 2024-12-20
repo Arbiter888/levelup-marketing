@@ -33,15 +33,14 @@ serve(async (req) => {
     const systemMessage = `You are an expert email marketing copywriter for restaurants. 
     Create an engaging email that highlights special offers and menu items. 
     Use a friendly, inviting tone and include clear calls-to-action.
-    Format the response for email clients with proper spacing and sections.
+    Format the response with proper HTML tags for email clients.
     Include the unique code: ${uniqueCode}
-    Keep paragraphs short and use spacing for readability.
-    Do not use asterisks or markdown formatting.
-    Create content that looks like a proper email, not a document.
-    Use HTML formatting for bold text (<b>text</b>) and links (<a href="url">text</a>).
-    Include proper spacing between sections.
-    Format phone numbers as clickable links.
-    Include Google Maps links as clickable buttons.`
+    Keep paragraphs short and use proper spacing.
+    Do not use markdown formatting.
+    Create content that looks like a proper marketing email.
+    Use <b> tags for emphasis, not asterisks.
+    Format phone numbers and links as clickable elements.
+    Include proper spacing between sections.`
 
     let userMessage = `Create an email marketing message for ${restaurantName} with this promotion: ${promotion}.`;
     if (menuUrl) {
@@ -72,35 +71,36 @@ serve(async (req) => {
     // Add photo HTML if photos are provided
     if (promoPhotos?.length > 0) {
       const photoHtml = promoPhotos.map((photo: string) => 
-        `<img src="${photo}" alt="Food at ${restaurantName}" style="max-width: 300px; height: auto; margin: 10px 0; border-radius: 8px;">`
+        `<img src="${photo}" alt="Food at ${restaurantName}" style="max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px;">`
       ).join('\n')
       emailCopy += `\n\n${photoHtml}`
     }
 
     // Add contact information and social links
-    let contactSection = '\n\n<div style="margin-top: 20px; padding: 20px; background-color: #f8f8f8; border-radius: 8px;">'
+    let contactSection = '\n\n<div class="contact-section">'
     contactSection += `<b>Visit ${restaurantName}</b><br/>`
     
     if (phoneNumber) {
-      contactSection += `<p>📞 <a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">Call to Book: ${phoneNumber}</a></p>`
+      contactSection += `<p>📞 <a href="tel:${phoneNumber}" class="cta-button">Call to Book: ${phoneNumber}</a></p>`
     }
     
     if (googleMapsUrl) {
-      contactSection += `<p>📍 <a href="${googleMapsUrl}" style="color: #E94E87; text-decoration: none;">Find us on Google Maps</a></p>`
+      contactSection += `<p>📍 <a href="${googleMapsUrl}" target="_blank">Find us on Google Maps</a></p>`
     }
 
     // Add social media links if available
     if (websiteUrl || facebookUrl || instagramUrl) {
-      contactSection += '<p><b>Connect With Us:</b></p>'
+      contactSection += '<div class="social-links">'
       if (websiteUrl) {
-        contactSection += `<p>🌐 <a href="${websiteUrl}" style="color: #E94E87; text-decoration: none;">Visit our Website</a></p>`
+        contactSection += `<a href="${websiteUrl}" target="_blank">🌐 Website</a>`
       }
       if (facebookUrl) {
-        contactSection += `<p>📱 <a href="${facebookUrl}" style="color: #E94E87; text-decoration: none;">Follow us on Facebook</a></p>`
+        contactSection += `<a href="${facebookUrl}" target="_blank">📱 Facebook</a>`
       }
       if (instagramUrl) {
-        contactSection += `<p>📸 <a href="${instagramUrl}" style="color: #E94E87; text-decoration: none;">Follow us on Instagram</a></p>`
+        contactSection += `<a href="${instagramUrl}" target="_blank">📸 Instagram</a>`
       }
+      contactSection += '</div>'
     }
     
     contactSection += '</div>'
