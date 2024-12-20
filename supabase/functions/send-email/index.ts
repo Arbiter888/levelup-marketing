@@ -31,7 +31,7 @@ const handler = async (req: Request): Promise<Response> => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "EatUP! <gjacklin225@gmail.com>",
+        from: "EatUP! <onboarding@resend.dev>", // Using Resend's default sending domain
         to: ["gjacklin225@gmail.com"], // Always send to verified email during testing
         subject: emailRequest.subject,
         html: emailRequest.html,
