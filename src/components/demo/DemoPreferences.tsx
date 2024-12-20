@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Check } from "lucide-react";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { BasicInfoStep } from "./preferences/BasicInfoStep";
+import { SocialMediaStep } from "./preferences/SocialMediaStep";
+import { BookingStep } from "./preferences/BookingStep";
+import { RewardStep } from "./preferences/RewardStep";
 
 interface DemoPreferencesProps {
   onPreferencesSaved: (name: string, url: string, email: string) => void;
@@ -94,123 +95,37 @@ export const DemoPreferences = ({ onPreferencesSaved }: DemoPreferencesProps) =>
 
   return (
     <div className="space-y-4 bg-white/80 backdrop-blur-sm p-6 rounded-lg shadow-sm">
-      <div className="space-y-2">
-        <Label htmlFor="restaurantName">Restaurant Name</Label>
-        <Input
-          id="restaurantName"
-          value={restaurantName}
-          onChange={(e) => setRestaurantName(e.target.value)}
-          placeholder="Enter your restaurant name"
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="googleMapsUrl">Google Maps URL</Label>
-        <Input
-          id="googleMapsUrl"
-          value={googleMapsUrl}
-          onChange={(e) => setGoogleMapsUrl(e.target.value)}
-          placeholder="Paste your Google Maps link"
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="contactEmail">Contact Email</Label>
-        <Input
-          id="contactEmail"
-          type="email"
-          value={contactEmail}
-          onChange={(e) => setContactEmail(e.target.value)}
-          placeholder="Enter restaurant contact email"
-        />
-      </div>
+      <BasicInfoStep
+        restaurantName={restaurantName}
+        setRestaurantName={setRestaurantName}
+        googleMapsUrl={googleMapsUrl}
+        setGoogleMapsUrl={setGoogleMapsUrl}
+        contactEmail={contactEmail}
+        setContactEmail={setContactEmail}
+        websiteUrl={websiteUrl}
+        setWebsiteUrl={setWebsiteUrl}
+      />
 
-      <div className="space-y-2">
-        <Label htmlFor="websiteUrl">Website URL</Label>
-        <Input
-          id="websiteUrl"
-          type="url"
-          value={websiteUrl}
-          onChange={(e) => setWebsiteUrl(e.target.value)}
-          placeholder="Enter your website URL"
-        />
-      </div>
+      <SocialMediaStep
+        facebookUrl={facebookUrl}
+        setFacebookUrl={setFacebookUrl}
+        instagramUrl={instagramUrl}
+        setInstagramUrl={setInstagramUrl}
+      />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="facebookUrl">Facebook URL</Label>
-          <Input
-            id="facebookUrl"
-            type="url"
-            value={facebookUrl}
-            onChange={(e) => setFacebookUrl(e.target.value)}
-            placeholder="Enter Facebook page URL"
-          />
-        </div>
+      <BookingStep
+        phoneNumber={phoneNumber}
+        setPhoneNumber={setPhoneNumber}
+        bookingUrl={bookingUrl}
+        setBookingUrl={setBookingUrl}
+        preferredBookingMethod={preferredBookingMethod}
+        setPreferredBookingMethod={setPreferredBookingMethod}
+      />
 
-        <div className="space-y-2">
-          <Label htmlFor="instagramUrl">Instagram URL</Label>
-          <Input
-            id="instagramUrl"
-            type="url"
-            value={instagramUrl}
-            onChange={(e) => setInstagramUrl(e.target.value)}
-            placeholder="Enter Instagram profile URL"
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="phoneNumber">Phone Number</Label>
-        <Input
-          id="phoneNumber"
-          type="tel"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-          placeholder="Enter contact phone number"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="uniqueReward">Unique Reward</Label>
-        <Input
-          id="uniqueReward"
-          value={uniqueReward}
-          onChange={(e) => setUniqueReward(e.target.value)}
-          placeholder="Enter the reward (e.g., '10% off your next visit')"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Preferred Booking Method</Label>
-        <RadioGroup
-          value={preferredBookingMethod}
-          onValueChange={setPreferredBookingMethod}
-          className="flex flex-col space-y-1"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="phone" id="phone" />
-            <Label htmlFor="phone">Phone</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="website" id="website" />
-            <Label htmlFor="website">Website</Label>
-          </div>
-        </RadioGroup>
-      </div>
-
-      {preferredBookingMethod === 'website' && (
-        <div className="space-y-2">
-          <Label htmlFor="bookingUrl">Booking URL</Label>
-          <Input
-            id="bookingUrl"
-            type="url"
-            value={bookingUrl}
-            onChange={(e) => setBookingUrl(e.target.value)}
-            placeholder="Enter booking page URL"
-          />
-        </div>
-      )}
+      <RewardStep
+        uniqueReward={uniqueReward}
+        setUniqueReward={setUniqueReward}
+      />
 
       <Button 
         onClick={handleSavePreferences}
