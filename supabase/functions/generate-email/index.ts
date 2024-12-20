@@ -34,21 +34,16 @@ serve(async (req) => {
     Create an engaging email that highlights special offers and menu items. 
     Use a friendly, inviting tone and include clear calls-to-action.
     Format the response with proper HTML tags for email clients.
-    Include the unique code: ${uniqueCode}
     Keep paragraphs short and use proper spacing.
-    Do not use markdown formatting.
-    Create content that looks like a proper marketing email.
+    Do not include any contact information or social links - these will be added separately.
+    Do not mention the unique code - it will be added separately.
+    Focus only on the promotional content and menu highlights.
     Use <b> tags for emphasis, not asterisks.
-    Format phone numbers and links as clickable elements.
-    Include proper spacing between sections.
-    Make sure to mention that customers should show the unique code to their server to receive their special reward.`
+    Keep the content concise and focused on the promotion.`
 
     let userMessage = `Create an email marketing message for ${restaurantName} with this promotion: ${promotion}.`;
     if (menuUrl) {
       userMessage += ` The restaurant has provided their menu for reference.`;
-    }
-    if (promoPhotos?.length > 0) {
-      userMessage += ` They've also provided ${promoPhotos.length} appetizing food photos to include.`;
     }
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -71,37 +66,41 @@ serve(async (req) => {
 
     // Add photo HTML if photos are provided
     if (promoPhotos?.length > 0) {
-      const photoHtml = promoPhotos.map((photo: string) => 
+      emailCopy += '\n\n<div style="margin: 2rem 0; text-align: center;">'
+      emailCopy += promoPhotos.map((photo: string) => 
         `<img src="${photo}" alt="Food at ${restaurantName}" style="max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px;">`
       ).join('\n')
-      emailCopy += `\n\n${photoHtml}`
+      emailCopy += '</div>'
     }
 
+    // Add a clear divider
+    emailCopy += '\n\n<hr style="border: none; border-top: 2px solid #f0f0f0; margin: 2rem 0;">'
+
     // Add contact information and social links
-    let contactSection = '\n\n<div class="contact-section" style="margin-top: 2rem; padding: 1rem; background-color: #f8f9fa; border-radius: 8px;">'
-    contactSection += `<h3 style="color: #333; margin-bottom: 1rem;">Visit ${restaurantName}</h3>`
+    let contactSection = `<div class="contact-section" style="margin-top: 2rem; padding: 1.5rem; background-color: #f8f9fa; border-radius: 8px;">`
+    contactSection += `<h3 style="color: #333; margin-bottom: 1rem; font-size: 1.5rem;">Visit ${restaurantName}</h3>`
     
     if (phoneNumber) {
-      contactSection += `<p>📞 <a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">Call to Book: ${phoneNumber}</a></p>`
+      contactSection += `<p style="margin: 0.75rem 0;"><span style="color: #E94E87;">📞</span> <a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">Call to Book: ${phoneNumber}</a></p>`
     }
     
     if (googleMapsUrl) {
-      contactSection += `<p>📍 <a href="${googleMapsUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">Find us on Google Maps</a></p>`
+      contactSection += `<p style="margin: 0.75rem 0;"><span style="color: #E94E87;">📍</span> <a href="${googleMapsUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">Find us on Google Maps</a></p>`
     }
 
     // Add booking information
     if (preferredBookingMethod === 'website' && bookingUrl) {
-      contactSection += `<p>🗓️ <a href="${bookingUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">Book a Table Online</a></p>`
+      contactSection += `<p style="margin: 0.75rem 0;"><span style="color: #E94E87;">🗓️</span> <a href="${bookingUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">Book a Table Online</a></p>`
     }
 
     // Add social media links if available
     if (websiteUrl || facebookUrl || instagramUrl) {
-      contactSection += '<div class="social-links" style="margin-top: 1rem;">'
+      contactSection += '<div style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">'
       if (websiteUrl) {
-        contactSection += `<a href="${websiteUrl}" target="_blank" style="color: #E94E87; text-decoration: none; margin-right: 1rem;">🌐 Website</a>`
+        contactSection += `<a href="${websiteUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">🌐 Website</a>`
       }
       if (facebookUrl) {
-        contactSection += `<a href="${facebookUrl}" target="_blank" style="color: #E94E87; text-decoration: none; margin-right: 1rem;">📱 Facebook</a>`
+        contactSection += `<a href="${facebookUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">📱 Facebook</a>`
       }
       if (instagramUrl) {
         contactSection += `<a href="${instagramUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">📸 Instagram</a>`
@@ -109,12 +108,12 @@ serve(async (req) => {
       contactSection += '</div>'
     }
 
-    // Add unique code reminder
+    // Add unique code reminder in a styled box
     contactSection += `
-      <div style="margin-top: 1.5rem; padding: 1rem; background-color: #fff; border-radius: 8px; border: 2px dashed #E94E87;">
-        <h4 style="color: #E94E87; margin-bottom: 0.5rem;">Your Special Reward Code</h4>
-        <p style="font-family: monospace; font-size: 1.2rem; font-weight: bold; color: #333;">${uniqueCode}</p>
-        <p style="color: #666; font-size: 0.9rem;">Show this code to your server on your next visit to receive your special reward!</p>
+      <div style="margin-top: 1.5rem; padding: 1.5rem; background-color: #fff; border-radius: 8px; border: 2px dashed #E94E87;">
+        <h4 style="color: #E94E87; margin: 0 0 0.75rem 0; font-size: 1.2rem;">Your Special Reward Code</h4>
+        <p style="font-family: monospace; font-size: 1.5rem; font-weight: bold; color: #333; margin: 0.5rem 0;">${uniqueCode}</p>
+        <p style="color: #666; font-size: 0.9rem; margin: 0.5rem 0;">Show this code to your server on your next visit to receive your special reward!</p>
       </div>
     `
     
