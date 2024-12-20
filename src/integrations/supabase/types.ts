@@ -111,6 +111,60 @@ export type Database = {
         }
         Relationships: []
       }
+      email_campaigns: {
+        Row: {
+          created_at: string
+          email_copy: string
+          id: string
+          menu_photo_url: string | null
+          offer_id: string | null
+          promo_photos: string[] | null
+          restaurant_id: string | null
+          sent_at: string | null
+          status: string | null
+          unique_code: string
+        }
+        Insert: {
+          created_at?: string
+          email_copy: string
+          id?: string
+          menu_photo_url?: string | null
+          offer_id?: string | null
+          promo_photos?: string[] | null
+          restaurant_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          unique_code: string
+        }
+        Update: {
+          created_at?: string
+          email_copy?: string
+          id?: string
+          menu_photo_url?: string | null
+          offer_id?: string | null
+          promo_photos?: string[] | null
+          restaurant_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          unique_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_campaigns_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "restaurant_offers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_campaigns_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -137,11 +191,15 @@ export type Database = {
           created_at: string
           description: string
           discount_value: string
+          email_template: string | null
           id: string
+          menu_photo_url: string | null
+          promo_photos: string[] | null
           restaurant_id: string | null
           status: string | null
           terms_conditions: string | null
           title: string
+          valid_days: number | null
           valid_from: string
           valid_until: string | null
         }
@@ -149,11 +207,15 @@ export type Database = {
           created_at?: string
           description: string
           discount_value: string
+          email_template?: string | null
           id?: string
+          menu_photo_url?: string | null
+          promo_photos?: string[] | null
           restaurant_id?: string | null
           status?: string | null
           terms_conditions?: string | null
           title: string
+          valid_days?: number | null
           valid_from?: string
           valid_until?: string | null
         }
@@ -161,11 +223,15 @@ export type Database = {
           created_at?: string
           description?: string
           discount_value?: string
+          email_template?: string | null
           id?: string
+          menu_photo_url?: string | null
+          promo_photos?: string[] | null
           restaurant_id?: string | null
           status?: string | null
           terms_conditions?: string | null
           title?: string
+          valid_days?: number | null
           valid_from?: string
           valid_until?: string | null
         }

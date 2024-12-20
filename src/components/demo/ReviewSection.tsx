@@ -3,9 +3,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { RewardsSection } from "./RewardsSection";
-import { ThoughtsStep } from "./steps/ThoughtsStep";
-import { UploadStep } from "./steps/UploadStep";
-import { RefineStep } from "./steps/RefineStep";
+import { PromotionStep } from "./steps/PromotionStep";
+import { MenuUploadStep } from "./steps/MenuUploadStep";
+import { PromoPhotosStep } from "./steps/PromoPhotosStep";
+import { EmailPreviewStep } from "./steps/EmailPreviewStep";
 import { DemoPreferences } from "./DemoPreferences";
 import { nanoid } from 'nanoid';
 import { AiFeedbackSection } from "./AiFeedbackSection";
@@ -24,10 +25,11 @@ export const ReviewSection = ({
   onTakeAiSurvey
 }: ReviewSectionProps) => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [reviewText, setReviewText] = useState("");
-  const [refinedReview, setRefinedReview] = useState("");
-  const [analysisResult, setAnalysisResult] = useState<any>(null);
-  const [isRefining, setIsRefining] = useState(false);
+  const [promotionText, setPromotionText] = useState("");
+  const [emailCopy, setEmailCopy] = useState("");
+  const [menuData, setMenuData] = useState<any>(null);
+  const [promoPhotos, setPromoPhotos] = useState<string[]>([]);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [rewardCode, setRewardCode] = useState<string | null>(null);
   const [googleMapsUrl, setGoogleMapsUrl] = useState(customGoogleMapsUrl || "https://maps.app.goo.gl/Nx23mQHet4TBfctJ6");
   const [restaurantName, setRestaurantName] = useState(customRestaurantName || "The Local Kitchen & Bar");
@@ -38,9 +40,8 @@ export const ReviewSection = ({
     setGoogleMapsUrl(url);
   };
 
-  const handleReceiptUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMenuUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    console.log('File selected:', file);
     if (!file) return;
 
     try {
@@ -49,44 +50,26 @@ export const ReviewSection = ({
       const fileName = `${crypto.randomUUID()}.${fileExt}`;
       const filePath = `${fileName}`;
 
-      console.log('Uploading file to Supabase storage...');
-      const { error: uploadError, data: uploadData } = await supabase.storage
-        .from('review_photos')
+      const { error: uploadError } = await supabase.storage
+        .from('restaurant_menus')
         .upload(filePath, file);
 
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-        throw uploadError;
-      }
-      console.log('Upload successful:', uploadData);
+      if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from('review_photos')
+        .from('restaurant_menus')
         .getPublicUrl(filePath);
 
-      console.log('Public URL generated:', publicUrl);
-
-      console.log('Calling analyze-receipt function...');
-      const { data, error } = await supabase.functions.invoke('analyze-receipt', {
-        body: { imageUrl: publicUrl },
-      });
-
-      if (error) {
-        console.error('Analysis error:', error);
-        throw error;
-      }
-      console.log('Analysis result:', data);
-
-      setAnalysisResult(data.analysis);
+      setMenuData({ url: publicUrl });
       toast({
-        title: "✅ Receipt Added!",
-        description: "Receipt uploaded and analyzed successfully.",
+        title: "✅ Menu Added!",
+        description: "Menu uploaded successfully.",
       });
     } catch (error) {
-      console.error('Error uploading receipt:', error);
+      console.error('Error uploading menu:', error);
       toast({
         title: "Error",
-        description: "Failed to analyze receipt. Please try again.",
+        description: "Failed to upload menu. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -94,62 +77,107 @@ export const ReviewSection = ({
     }
   };
 
-  const handleRefineReview = async () => {
-    if (!reviewText.trim()) {
+  const handlePromoPhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsAnalyzing(true);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${crypto.randomUUID()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('restaurant_photos')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('restaurant_photos')
+        .getPublicUrl(filePath);
+
+      setPromoPhotos(prev => [...prev, publicUrl]);
       toast({
-        title: "Review required",
-        description: "Please write your thoughts before refining.",
+        title: "✅ Photo Added!",
+        description: "Promotional photo uploaded successfully.",
+      });
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload photo. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const handleGenerateEmail = async () => {
+    if (!promotionText.trim()) {
+      toast({
+        title: "Promotion required",
+        description: "Please write your promotion details before generating.",
         variant: "destructive",
       });
       return;
     }
 
     try {
-      setIsRefining(true);
-      const { data, error } = await supabase.functions.invoke('refine-review', {
+      setIsGenerating(true);
+      const { data, error } = await supabase.functions.invoke('generate-email', {
         body: { 
-          review: reviewText,
-          receiptData: analysisResult || null,
-          restaurantName: restaurantName // Pass the restaurant name to the function
+          promotion: promotionText,
+          menuUrl: menuData?.url || null,
+          promoPhotos: promoPhotos,
+          restaurantName: restaurantName
         },
       });
 
       if (error) throw error;
       
-      setRefinedReview(data.refinedReview);
+      setEmailCopy(data.emailCopy);
       toast({
-        title: "✅ Review Enhanced!",
-        description: "Your review has been professionally enhanced. Feel free to edit it further!",
+        title: "✅ Email Generated!",
+        description: "Your email has been professionally crafted.",
       });
     } catch (error) {
-      console.error('Error refining review:', error);
+      console.error('Error generating email:', error);
       toast({
         title: "Error",
-        description: "Failed to refine review. Please try again.",
+        description: "Failed to generate email. Please try again.",
         variant: "destructive",
       });
     } finally {
-      setIsRefining(false);
+      setIsGenerating(false);
     }
   };
 
-  const handleCopyAndRedirect = () => {
-    const finalReview = refinedReview || reviewText;
-    navigator.clipboard.writeText(finalReview);
-    window.open(googleMapsUrl, '_blank');
-    // Generate a unique 8-character reward code
+  const handlePreviewEmail = () => {
     const uniqueCode = nanoid(8);
     setRewardCode(uniqueCode);
+    
+    const emailBody = emailCopy.replace('[UNIQUE_CODE]', uniqueCode);
+    navigator.clipboard.writeText(emailBody);
+    
     toast({
-      title: "Review copied!",
-      description: "Opening Google Reviews in a new tab. Please paste your review there.",
+      title: "Email preview ready!",
+      description: "Opening email preview with your content.",
     });
+
+    // Create email preview
+    const recipients = ['preview@eatup.co'];
+    const subject = encodeURIComponent(`${restaurantName} - Special Offer`);
+    const body = encodeURIComponent(emailBody);
+    const mailtoLink = `mailto:${recipients.join(',')}?subject=${subject}&body=${body}`;
+    window.location.href = mailtoLink;
   };
 
   const handleStep1Complete = () => {
     toast({
       title: "✅ Step 1 Complete!",
-      description: "Great! You can now enhance your review or optionally add a receipt photo.",
+      description: "Great! Now you can add your menu and promotional photos.",
     });
   };
 
@@ -163,43 +191,54 @@ export const ReviewSection = ({
         <div className="text-center">
           <div className="space-y-2">
             <p className="text-lg font-medium text-primary">
-              Get Your Reward Today! 🎁
+              Create Your Email Campaign! 📧
             </p>
             <div className="text-gray-600">
-              <p>Share your experience and get rewarded in 3 simple steps:</p>
-              <p>1. Write your review below</p>
-              <p>2. Add your receipt to better personalise your review</p>
-              <p>3. Post it on Google and show it to your server</p>
-              <p className="text-primary mt-2">Sign up to EatUP! for another reward for your second visit (more information below)</p>
+              <p>Create an engaging email campaign in 3 simple steps:</p>
+              <p>1. Share your promotion or menu highlights</p>
+              <p>2. Upload your latest menu</p>
+              <p>3. Add appetizing food photos</p>
+              <p className="text-primary mt-2">Preview your email and start engaging with your customers!</p>
             </div>
           </div>
         </div>
 
-        <ThoughtsStep 
-          reviewText={reviewText}
-          onChange={setReviewText}
+        <PromotionStep 
+          promotionText={promotionText}
+          onChange={setPromotionText}
           onComplete={handleStep1Complete}
         />
 
-        <UploadStep 
+        <MenuUploadStep 
           isAnalyzing={isAnalyzing}
-          analysisResult={analysisResult}
-          onFileSelect={handleReceiptUpload}
+          menuData={menuData}
+          onFileSelect={handleMenuUpload}
         />
 
-        <RefineStep 
-          reviewText={reviewText}
-          refinedReview={refinedReview}
-          isRefining={isRefining}
-          onRefine={handleRefineReview}
-          onRefinedReviewChange={setRefinedReview}
-          onCopyAndRedirect={handleCopyAndRedirect}
+        <PromoPhotosStep 
+          isUploading={isAnalyzing}
+          photos={promoPhotos}
+          onFileSelect={handlePromoPhotoUpload}
+        />
+
+        <Button
+          onClick={handleGenerateEmail}
+          disabled={isGenerating || !promotionText.trim()}
+          className="w-full bg-primary hover:bg-primary/90 text-white"
+        >
+          {isGenerating ? "Generating Email..." : "Generate Email Copy"}
+        </Button>
+
+        <EmailPreviewStep 
+          emailCopy={emailCopy}
+          isGenerating={isGenerating}
+          onPreviewEmail={handlePreviewEmail}
         />
 
         <div className="pt-6">
           <RewardsSection 
             rewardCode={rewardCode} 
-            hasUploadedReceipt={!!analysisResult}
+            hasUploadedReceipt={!!menuData}
             customRestaurantName={restaurantName}
             customGoogleMapsUrl={googleMapsUrl}
           />
