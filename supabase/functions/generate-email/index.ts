@@ -30,21 +30,21 @@ serve(async (req) => {
     const uniqueCode = nanoid(8);
 
     const systemMessage = `You are an expert email marketing copywriter for restaurants. 
-    Create an engaging promotional email that highlights the special offers and menu items.
+    Create a concise, engaging promotional email that highlights the special offers and menu items.
     
     Important formatting rules:
     1. Write in plain text without any HTML tags
     2. Use simple paragraphs with line breaks between them
-    3. Keep paragraphs short and focused
+    3. Keep paragraphs short and focused (2-3 sentences max)
     4. Don't include any formatting instructions or symbols
     5. Don't mention contact information or social links
     6. Don't include the unique code
     7. Focus only on the promotional content and menu highlights
-    8. Keep the content concise and engaging
-    9. Don't include any calls to action like "Reserve now" or "Book a table"
+    8. Keep the content brief and engaging (max 3-4 paragraphs)
+    9. Don't include any calls to action
     10. Don't use asterisks or other special characters for emphasis`;
 
-    let userMessage = `Create an email marketing message for ${restaurantName} with this promotion: ${promotion}.`;
+    let userMessage = `Create a brief, focused email marketing message for ${restaurantName} with this promotion: ${promotion}.`;
     if (menuUrl) {
       userMessage += ` The restaurant has provided their menu for reference.`;
     }
@@ -65,6 +65,7 @@ serve(async (req) => {
     })
 
     const data = await response.json()
+    console.log('OpenAI response:', data);
     
     // Process the raw text into properly formatted paragraphs
     const rawContent = data.choices[0].message.content;
@@ -84,32 +85,31 @@ serve(async (req) => {
       emailCopy += '</div>';
     }
 
-    // Add styled contact section
+    // Add minimal contact section with reward code
     emailCopy += `
       <div style="background-color: #f8f9fa; border-radius: 8px; padding: 1.5rem; margin-top: 2rem;">
-        <h3 style="color: #333; margin: 0 0 1rem 0; font-size: 1.5rem;">Visit ${restaurantName}</h3>
+        <h3 style="color: #333; margin: 0 0 1rem 0; font-size: 1.5rem;">${restaurantName}</h3>
         
-        <div style="margin: 1rem 0;">
+        <div style="margin: 0.5rem 0;">
           ${phoneNumber ? 
-            `<p style="margin: 0.5rem 0;"><span style="color: #E94E87;">📞</span> <a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">Call: ${phoneNumber}</a></p>` 
+            `<p style="margin: 0.5rem 0;"><a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">📞 ${phoneNumber}</a></p>` 
             : ''}
           ${googleMapsUrl ? 
-            `<p style="margin: 0.5rem 0;"><span style="color: #E94E87;">📍</span> <a href="${googleMapsUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">Find us on Google Maps</a></p>`
+            `<p style="margin: 0.5rem 0;"><a href="${googleMapsUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">📍 Find us on Google Maps</a></p>`
             : ''}
         </div>
 
         ${(websiteUrl || facebookUrl || instagramUrl) ? 
-          `<div style="margin-top: 1rem;">
-            ${websiteUrl ? `<a href="${websiteUrl}" target="_blank" style="color: #E94E87; text-decoration: none; margin-right: 1rem;">🌐 Website</a>` : ''}
-            ${facebookUrl ? `<a href="${facebookUrl}" target="_blank" style="color: #E94E87; text-decoration: none; margin-right: 1rem;">📱 Facebook</a>` : ''}
-            ${instagramUrl ? `<a href="${instagramUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">📸 Instagram</a>` : ''}
+          `<div style="margin: 1rem 0;">
+            ${websiteUrl ? `<a href="${websiteUrl}" target="_blank" style="color: #666; text-decoration: none; margin-right: 1rem;">Website</a>` : ''}
+            ${facebookUrl ? `<a href="${facebookUrl}" target="_blank" style="color: #666; text-decoration: none; margin-right: 1rem;">Facebook</a>` : ''}
+            ${instagramUrl ? `<a href="${instagramUrl}" target="_blank" style="color: #666; text-decoration: none;">Instagram</a>` : ''}
           </div>`
           : ''}
 
-        <div style="margin-top: 1.5rem; background-color: #fff; border: 2px dashed #E94E87; border-radius: 8px; padding: 1.5rem;">
-          <h4 style="color: #E94E87; margin: 0 0 0.75rem 0; font-size: 1.2rem;">Your Special Reward Code</h4>
-          <p style="font-family: monospace; font-size: 1.5rem; font-weight: bold; color: #333; margin: 0.5rem 0;">${uniqueCode}</p>
-          <p style="color: #666; font-size: 0.9rem; margin: 0.5rem 0;">Show this code to your server on your next visit!</p>
+        <div style="margin-top: 1rem; background-color: #fff; border: 2px dashed #E94E87; border-radius: 8px; padding: 1rem; text-align: center;">
+          <p style="color: #E94E87; margin: 0 0 0.5rem 0; font-size: 0.9rem;">Your Special Reward Code</p>
+          <p style="font-family: monospace; font-size: 1.2rem; font-weight: bold; color: #333; margin: 0;">${uniqueCode}</p>
         </div>
       </div>
     `;
