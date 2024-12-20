@@ -71,10 +71,15 @@ serve(async (req) => {
     const rawContent = data.choices[0].message.content;
     const paragraphs = rawContent.split('\n\n').filter(p => p.trim());
     
-    // Convert paragraphs into styled divs
-    let emailCopy = paragraphs.map(paragraph => 
+    // Start with the greeting
+    let emailCopy = '<div style="margin-bottom: 2rem; line-height: 1.6; color: #333333;">';
+    emailCopy += '<p style="font-size: 1.1rem; margin-bottom: 1rem;">Dear Food Lover,</p>';
+    
+    // Add the content paragraphs
+    emailCopy += paragraphs.map(paragraph => 
       `<div style="margin-bottom: 1rem; line-height: 1.6; color: #333333;">${paragraph}</div>`
     ).join('\n');
+    emailCopy += '</div>';
 
     // Add photo section if photos are provided
     if (promoPhotos?.length > 0) {
