@@ -10,31 +10,39 @@ import { Star, Quote } from "lucide-react";
 
 const exampleReviews = [
   {
-    text: "EatUP! has transformed how we handle customer feedback. The AI-powered review system helps us understand our customers better and improve our service.",
+    text: "The ambiance was perfect for our anniversary dinner. The wagyu steak was cooked to perfection, and the wine pairing suggested by the sommelier was exceptional. The service was attentive without being intrusive.",
     author: "Sarah Martinez",
-    role: "Owner, The Rustic Table",
+    role: "Dinner Guest",
     rating: 5,
+    visitDate: "March 15, 2024",
+    visitType: "Special Occasion",
     image: "/lovable-uploads/23bef056-e873-4e3d-b77b-8ac3c49fa8d8.png"
   },
   {
-    text: "Since implementing EatUP!, we've seen a 40% increase in customer engagement and valuable feedback that has helped us enhance our menu offerings.",
+    text: "Had a fantastic business lunch here. The prix fixe menu offers great value, and the service is quick without compromising quality. The grilled sea bass was a standout dish.",
     author: "John Davidson",
-    role: "Manager, Urban Plates",
+    role: "Business Lunch",
     rating: 5,
+    visitDate: "March 10, 2024",
+    visitType: "Business Meal",
     image: "/lovable-uploads/23bef056-e873-4e3d-b77b-8ac3c49fa8d8.png"
   },
   {
-    text: "The voice review feature is a game-changer. Our customers love how easy it is to share their experiences, and we love the detailed insights we receive.",
+    text: "Sunday brunch here is a must-try! The eggs Benedict with house-cured salmon was incredible, and the bottomless mimosas were perfectly balanced. Great atmosphere for a weekend gathering.",
     author: "Michael Rodriguez",
-    role: "Owner, Flavor House",
+    role: "Brunch Guest",
     rating: 5,
+    visitDate: "March 3, 2024",
+    visitType: "Weekend Brunch",
     image: "/lovable-uploads/23bef056-e873-4e3d-b77b-8ac3c49fa8d8.png"
   },
   {
-    text: "EatUP! has helped us build stronger relationships with our customers. The reward system keeps them coming back, and the feedback helps us grow.",
+    text: "The tasting menu was an incredible culinary journey. Each course was beautifully presented and the flavors were perfectly balanced. The sommelier's wine pairings elevated the experience.",
     author: "Emily Wong",
-    role: "Owner, Asian Fusion Kitchen",
+    role: "Fine Dining Guest",
     rating: 5,
+    visitDate: "February 28, 2024",
+    visitType: "Tasting Menu Experience",
     image: "/lovable-uploads/23bef056-e873-4e3d-b77b-8ac3c49fa8d8.png"
   },
 ];
@@ -61,18 +69,21 @@ export const ExampleReviews = () => {
                   />
                   <div>
                     <p className="font-semibold text-secondary">{review.author}</p>
-                    <p className="text-sm text-muted-foreground">{review.role}</p>
+                    <p className="text-sm text-muted-foreground">{review.visitType}</p>
                   </div>
                 </div>
                 <Quote className="w-8 h-8 text-primary/20" />
                 <p className="text-secondary/80 leading-relaxed">{review.text}</p>
-                <div className="flex items-center space-x-1">
-                  {[...Array(review.rating)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-5 h-5 fill-primary text-primary"
-                    />
-                  ))}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-1">
+                    {[...Array(review.rating)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="w-5 h-5 fill-primary text-primary"
+                      />
+                    ))}
+                  </div>
+                  <p className="text-sm text-muted-foreground">{review.visitDate}</p>
                 </div>
               </div>
             </CarouselItem>
