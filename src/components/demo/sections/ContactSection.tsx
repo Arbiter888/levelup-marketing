@@ -1,18 +1,16 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { UseFormReturn } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { RestaurantFormData } from "../types";
 
-interface ContactSectionProps {
-  form: UseFormReturn<RestaurantFormData>;
-}
+export const ContactSection = () => {
+  const { control } = useFormContext<RestaurantFormData>();
 
-export const ContactSection = ({ form }: ContactSectionProps) => {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
         <FormField
-          control={form.control}
+          control={control}
           name="contactEmail"
           render={({ field }) => (
             <FormItem>
@@ -32,7 +30,7 @@ export const ContactSection = ({ form }: ContactSectionProps) => {
 
       <div className="space-y-2">
         <FormField
-          control={form.control}
+          control={control}
           name="phoneNumber"
           render={({ field }) => (
             <FormItem>

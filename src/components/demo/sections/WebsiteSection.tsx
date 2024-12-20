@@ -1,18 +1,16 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { UseFormReturn } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { RestaurantFormData } from "../types";
 
-interface WebsiteSectionProps {
-  form: UseFormReturn<RestaurantFormData>;
-}
+export const WebsiteSection = () => {
+  const { control } = useFormContext<RestaurantFormData>();
 
-export const WebsiteSection = ({ form }: WebsiteSectionProps) => {
   return (
     <div className="space-y-4">
       <FormField
-        control={form.control}
+        control={control}
         name="websiteDescription"
         render={({ field }) => (
           <FormItem>
@@ -30,7 +28,7 @@ export const WebsiteSection = ({ form }: WebsiteSectionProps) => {
       />
 
       <FormField
-        control={form.control}
+        control={control}
         name="websiteUrl"
         render={({ field }) => (
           <FormItem>

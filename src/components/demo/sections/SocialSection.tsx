@@ -1,18 +1,16 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { UseFormReturn } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { RestaurantFormData } from "../types";
 
-interface SocialSectionProps {
-  form: UseFormReturn<RestaurantFormData>;
-}
+export const SocialSection = () => {
+  const { control } = useFormContext<RestaurantFormData>();
 
-export const SocialSection = ({ form }: SocialSectionProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="space-y-2">
         <FormField
-          control={form.control}
+          control={control}
           name="facebookUrl"
           render={({ field }) => (
             <FormItem>
@@ -32,7 +30,7 @@ export const SocialSection = ({ form }: SocialSectionProps) => {
 
       <div className="space-y-2">
         <FormField
-          control={form.control}
+          control={control}
           name="instagramUrl"
           render={({ field }) => (
             <FormItem>

@@ -1,15 +1,12 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { UseFormReturn } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { RestaurantFormData } from "../types";
 
-interface BookingSectionProps {
-  form: UseFormReturn<RestaurantFormData>;
-}
-
-export const BookingSection = ({ form }: BookingSectionProps) => {
-  const preferredBookingMethod = form.watch("preferredBookingMethod");
+export const BookingSection = () => {
+  const { watch, setValue, control } = useFormContext<RestaurantFormData>();
+  const preferredBookingMethod = watch("preferredBookingMethod");
 
   return (
     <div className="space-y-4">
@@ -17,7 +14,7 @@ export const BookingSection = ({ form }: BookingSectionProps) => {
         <FormLabel>Preferred Booking Method</FormLabel>
         <RadioGroup
           value={preferredBookingMethod}
-          onValueChange={(value) => form.setValue("preferredBookingMethod", value)}
+          onValueChange={(value) => setValue("preferredBookingMethod", value)}
           className="flex flex-col space-y-1"
         >
           <div className="flex items-center space-x-2">
@@ -33,7 +30,7 @@ export const BookingSection = ({ form }: BookingSectionProps) => {
 
       {preferredBookingMethod === 'website' && (
         <FormField
-          control={form.control}
+          control={control}
           name="bookingUrl"
           render={({ field }) => (
             <FormItem>
