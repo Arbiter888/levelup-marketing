@@ -30,37 +30,14 @@ serve(async (req) => {
     // Generate a unique code for the preview
     const uniqueCode = nanoid(8);
 
-    // Create image HTML if photos are provided
-    const photoHtml = promoPhotos?.length > 0 
-      ? promoPhotos.map((photo: string) => 
-          `<img src="${photo}" alt="Food at ${restaurantName}" style="max-width: 300px; height: auto; margin: 10px 0; border-radius: 8px;">`
-        ).join('\n')
-      : '';
-
-    // Construct social media and contact section
-    let socialAndContactInfo = '\n\nConnect with us:';
-    if (websiteUrl) socialAndContactInfo += `\n• Visit our website: ${websiteUrl}`;
-    if (facebookUrl) socialAndContactInfo += `\n• Follow us on Facebook: ${facebookUrl}`;
-    if (instagramUrl) socialAndContactInfo += `\n• Follow us on Instagram: ${instagramUrl}`;
-    
-    // Add booking information
-    let bookingInfo = '\n\nMake a reservation:';
-    if (preferredBookingMethod === 'phone' && phoneNumber) {
-      bookingInfo += `\n• Call us at: ${phoneNumber}`;
-    } else if (preferredBookingMethod === 'website' && bookingUrl) {
-      bookingInfo += `\n• Book online: ${bookingUrl}`;
-    }
-
-    // Add Google Maps link
-    const locationInfo = `\n\nFind us:\n• Visit us on Google Maps: ${googleMapsUrl}`;
-
     const systemMessage = `You are an expert email marketing copywriter for restaurants. 
-    Create an engaging, plain-text email that highlights special offers and menu items. 
+    Create an engaging email that highlights special offers and menu items. 
     Use a friendly, inviting tone and include clear calls-to-action.
-    Format the response for email clients (no HTML).
+    Format the response for email clients with proper spacing and sections.
     Include the unique code: ${uniqueCode}
-    Include the provided social media links, booking information, and location details at the bottom of the email.
-    Keep paragraphs short and use spacing for readability.`
+    Keep paragraphs short and use spacing for readability.
+    Do not use asterisks or markdown formatting.
+    Create content that looks like a proper email, not a document.`
 
     let userMessage = `Create an email marketing message for ${restaurantName} with this promotion: ${promotion}.`;
     if (menuUrl) {
@@ -69,8 +46,6 @@ serve(async (req) => {
     if (promoPhotos?.length > 0) {
       userMessage += ` They've also provided ${promoPhotos.length} appetizing food photos to include.`;
     }
-    userMessage += `\n\nInclude these sections at the bottom of the email:${socialAndContactInfo}${bookingInfo}${locationInfo}`;
-    userMessage += `\n\nMake sure to include:\n1. An attention-grabbing subject line\n2. The promotion details\n3. Terms and conditions (valid for 7 days)\n4. Clear redemption instructions using the code: ${uniqueCode}`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -88,13 +63,18 @@ serve(async (req) => {
     })
 
     const data = await response.json()
-    const emailCopy = data.choices[0].message.content
+    let emailCopy = data.choices[0].message.content
 
-    // Add the photos to the email copy
-    const emailWithPhotos = photoHtml ? `${emailCopy}\n\n${photoHtml}` : emailCopy
+    // Add photo HTML if photos are provided
+    if (promoPhotos?.length > 0) {
+      const photoHtml = promoPhotos.map((photo: string) => 
+        `<img src="${photo}" alt="Food at ${restaurantName}" style="max-width: 300px; height: auto; margin: 10px 0; border-radius: 8px;">`
+      ).join('\n')
+      emailCopy += `\n\n${photoHtml}`
+    }
 
     return new Response(
-      JSON.stringify({ emailCopy: emailWithPhotos, uniqueCode }),
+      JSON.stringify({ emailCopy, uniqueCode }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
     )
   } catch (error) {
