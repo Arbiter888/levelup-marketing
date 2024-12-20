@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Check } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { ContactSection } from "./sections/ContactSection";
 import { SocialSection } from "./sections/SocialSection";
 import { BookingSection } from "./sections/BookingSection";
 import { WebsiteSection } from "./sections/WebsiteSection";
+import { RestaurantFormData } from "./types";
 
 interface DemoPreferencesProps {
   onPreferencesSaved: (name: string, url: string, email: string) => void;
@@ -17,7 +18,7 @@ export const DemoPreferences = ({ onPreferencesSaved }: DemoPreferencesProps) =>
   const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
 
-  const form = useForm({
+  const methods = useForm<RestaurantFormData>({
     defaultValues: {
       restaurantName: "The Local Kitchen & Bar",
       googleMapsUrl: "https://maps.app.goo.gl/Nx23mQHet4TBfctJ6",
@@ -35,10 +36,10 @@ export const DemoPreferences = ({ onPreferencesSaved }: DemoPreferencesProps) =>
   useEffect(() => {
     const savedPreferences = localStorage.getItem('demoPreferences');
     if (savedPreferences) {
-      const preferences = JSON.parse(savedPreferences);
+      const preferences = JSON.parse(savedPreferences) as RestaurantFormData;
       Object.keys(preferences).forEach(key => {
-        if (preferences[key]) {
-          form.setValue(key, preferences[key]);
+        if (preferences[key as keyof RestaurantFormData]) {
+          methods.setValue(key as keyof RestaurantFormData, preferences[key as keyof RestaurantFormData]);
         }
       });
       onPreferencesSaved(
@@ -47,9 +48,9 @@ export const DemoPreferences = ({ onPreferencesSaved }: DemoPreferencesProps) =>
         preferences.contactEmail || ""
       );
     }
-  }, [onPreferencesSaved, form]);
+  }, [onPreferencesSaved, methods]);
 
-  const handleSavePreferences = form.handleSubmit((data) => {
+  const handleSavePreferences = methods.handleSubmit((data) => {
     if (!data.restaurantName.trim() || !data.googleMapsUrl.trim()) {
       toast({
         title: "Missing information",
@@ -87,33 +88,35 @@ export const DemoPreferences = ({ onPreferencesSaved }: DemoPreferencesProps) =>
 
   return (
     <div className="space-y-4 bg-white/80 backdrop-blur-sm p-6 rounded-lg shadow-sm">
-      <form onSubmit={handleSavePreferences} className="space-y-6">
-        <WebsiteSection form={form} />
-        <ContactSection form={form} />
-        <SocialSection form={form} />
-        <BookingSection form={form} />
+      <FormProvider {...methods}>
+        <form onSubmit={handleSavePreferences} className="space-y-6">
+          <WebsiteSection />
+          <ContactSection />
+          <SocialSection />
+          <BookingSection />
 
-        <Button 
-          type="submit"
-          disabled={isSaving}
-          className={`w-full transition-all duration-300 ${
-            showSuccess 
-              ? "bg-green-500 hover:bg-green-600" 
-              : "bg-primary hover:bg-primary/90"
-          }`}
-        >
-          {showSuccess ? (
-            <>
-              <Check className="mr-2 h-4 w-4" />
-              Saved Successfully!
-            </>
-          ) : isSaving ? (
-            "Saving..."
-          ) : (
-            "Save Demo Preferences"
-          )}
-        </Button>
-      </form>
+          <Button 
+            type="submit"
+            disabled={isSaving}
+            className={`w-full transition-all duration-300 ${
+              showSuccess 
+                ? "bg-green-500 hover:bg-green-600" 
+                : "bg-primary hover:bg-primary/90"
+            }`}
+          >
+            {showSuccess ? (
+              <>
+                <Check className="mr-2 h-4 w-4" />
+                Saved Successfully!
+              </>
+            ) : isSaving ? (
+              "Saving..."
+            ) : (
+              "Save Demo Preferences"
+            )}
+          </Button>
+        </form>
+      </FormProvider>
     </div>
   );
 };
