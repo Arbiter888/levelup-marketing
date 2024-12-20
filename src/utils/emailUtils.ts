@@ -4,51 +4,38 @@ export const constructRewardEmailBody = (
   uniqueCode: string | null,
   review: string,
 ) => {
-  const visitTimestamp = new Date().toLocaleString();
-  
-  let emailBody = `Dear EatUP! Team,\n\n`;
-  emailBody += `I'm excited to join the EatUP! rewards program at ${businessName}! I understand that EatUP! is revolutionizing the dining experience by offering progressive rewards that get better with each visit.\n\n`;
-  
-  if (uniqueCode) {
-    emailBody += `My Unique Reward Code: ${uniqueCode}\n`;
-    emailBody += `(I'll show this code to my server on my next visit to redeem my personalized reward)\n\n`;
-  }
-  
-  emailBody += `Visit Details:\n`;
-  emailBody += `Date: ${visitTimestamp}\n`;
-  emailBody += `Restaurant: ${businessName}\n`;
-  emailBody += `Location: ${googleMapsUrl}\n\n`;
-  
-  emailBody += `My Review:\n${review}\n\n`;
-
-  emailBody += "About EatUP! Progressive Rewards Program:\n";
-  emailBody += "• First Visit (Today): Left a review and joined the program\n";
-  emailBody += "• Second Visit: Use unique reward code for a special welcome-back reward\n";
-  emailBody += "• Third Visit: Send receipt to unlock premium rewards tier\n";
-  emailBody += "• Fourth Visit and Beyond: Access to exclusive VIP offers\n\n";
-
-  emailBody += "My Next Steps:\n";
-  emailBody += "1. Return to " + businessName + " with my unique reward code\n";
-  emailBody += "2. After dining, reply to this email with my receipt photo\n";
-  emailBody += "3. Receive my exclusive third-visit reward voucher\n\n";
-
-  emailBody += "What I'll Get with EatUP!:\n";
-  emailBody += `1. Immediate Reward: Special offer for my next visit to ${businessName}\n`;
-  emailBody += "2. Progressive Benefits: Increasing rewards with each visit\n";
-  emailBody += "3. VIP Treatment: Priority access to special events and promotions\n";
-  emailBody += "4. Personalized Experience: AI-powered reward recommendations\n";
-  emailBody += "5. Exclusive Access: Members-only dining events and tastings\n\n";
-
-  emailBody += "Thank you for helping me enhance my dining experience with EatUP!'s innovative rewards program.\n\n";
-  emailBody += "Looking forward to my next visit!\n\n";
-  emailBody += "Best regards,\n";
-  emailBody += "[Your Name]";
+  const emailBody = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h2 style="color: #333;">Dear Food Lover,</h2>
+      
+      <p>Thank you for dining at ${businessName}! We're excited to share your experience:</p>
+      
+      <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <p style="font-style: italic;">${review}</p>
+      </div>
+      
+      <h3 style="color: #E94E87;">Contact Information</h3>
+      <p>
+        📍 <a href="${googleMapsUrl}" style="color: #E94E87; text-decoration: none;">Get Directions</a><br>
+        📞 Call to Book: ${googleMapsUrl ? 'Available on Google Maps' : 'Contact restaurant directly'}<br>
+        🌐 More Details: ${googleMapsUrl}
+      </p>
+      
+      <hr style="border: 1px solid #eee; margin: 20px 0;">
+      
+      <p style="color: #666; font-size: 14px;">
+        Looking forward to serving you again!<br>
+        Best regards,<br>
+        ${businessName} Team
+      </p>
+    </div>
+  `;
 
   return emailBody;
 };
 
 export const getEmailRecipients = () => {
-  const defaultRecipient = 'rewards@eatup.co';
+  const defaultRecipient = 'preview@eatup.co';
   const recipients = [defaultRecipient];
   
   try {
