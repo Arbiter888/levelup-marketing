@@ -37,7 +37,11 @@ serve(async (req) => {
     Include the unique code: ${uniqueCode}
     Keep paragraphs short and use spacing for readability.
     Do not use asterisks or markdown formatting.
-    Create content that looks like a proper email, not a document.`
+    Create content that looks like a proper email, not a document.
+    Use HTML formatting for bold text (<b>text</b>) and links (<a href="url">text</a>).
+    Include proper spacing between sections.
+    Format phone numbers as clickable links.
+    Include Google Maps links as clickable buttons.`
 
     let userMessage = `Create an email marketing message for ${restaurantName} with this promotion: ${promotion}.`;
     if (menuUrl) {
@@ -72,6 +76,35 @@ serve(async (req) => {
       ).join('\n')
       emailCopy += `\n\n${photoHtml}`
     }
+
+    // Add contact information and social links
+    let contactSection = '\n\n<div style="margin-top: 20px; padding: 20px; background-color: #f8f8f8; border-radius: 8px;">'
+    contactSection += `<b>Visit ${restaurantName}</b><br/>`
+    
+    if (phoneNumber) {
+      contactSection += `<p>📞 <a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">Call to Book: ${phoneNumber}</a></p>`
+    }
+    
+    if (googleMapsUrl) {
+      contactSection += `<p>📍 <a href="${googleMapsUrl}" style="color: #E94E87; text-decoration: none;">Find us on Google Maps</a></p>`
+    }
+
+    // Add social media links if available
+    if (websiteUrl || facebookUrl || instagramUrl) {
+      contactSection += '<p><b>Connect With Us:</b></p>'
+      if (websiteUrl) {
+        contactSection += `<p>🌐 <a href="${websiteUrl}" style="color: #E94E87; text-decoration: none;">Visit our Website</a></p>`
+      }
+      if (facebookUrl) {
+        contactSection += `<p>📱 <a href="${facebookUrl}" style="color: #E94E87; text-decoration: none;">Follow us on Facebook</a></p>`
+      }
+      if (instagramUrl) {
+        contactSection += `<p>📸 <a href="${instagramUrl}" style="color: #E94E87; text-decoration: none;">Follow us on Instagram</a></p>`
+      }
+    }
+    
+    contactSection += '</div>'
+    emailCopy += contactSection
 
     return new Response(
       JSON.stringify({ emailCopy, uniqueCode }),
