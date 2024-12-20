@@ -10,7 +10,6 @@ import { DemoPreferences } from "./DemoPreferences";
 import { AiFeedbackSection } from "./AiFeedbackSection";
 import { EmailGenerationSection } from "./steps/EmailGenerationSection";
 import { nanoid } from 'nanoid';
-import { DishPhoto } from "@/types/photo";
 
 interface ReviewSectionProps {
   customRestaurantName?: string;
@@ -38,7 +37,7 @@ export const ReviewSection = ({
   const [promotionText, setPromotionText] = useState("");
   const [uniqueReward, setUniqueReward] = useState("");
   const [emailCopy, setEmailCopy] = useState("");
-  const [promoPhotos, setPromoPhotos] = useState<DishPhoto[]>([]);
+  const [promoPhotos, setPromoPhotos] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [rewardCode, setRewardCode] = useState<string | null>(null);
   const [googleMapsUrl, setGoogleMapsUrl] = useState(customGoogleMapsUrl || "https://maps.app.goo.gl/Nx23mQHet4TBfctJ6");
@@ -58,7 +57,7 @@ export const ReviewSection = ({
     setGoogleMapsUrl(url);
   };
 
-  const handlePromoPhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>, dishName: string) => {
+  const handlePromoPhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -78,7 +77,7 @@ export const ReviewSection = ({
         .from('restaurant_photos')
         .getPublicUrl(filePath);
 
-      setPromoPhotos(prev => [...prev, { url: publicUrl, dishName }]);
+      setPromoPhotos(prev => [...prev, publicUrl]);
       toast({
         title: "✅ Photo Added!",
         description: "Promotional photo uploaded successfully.",
@@ -95,10 +94,6 @@ export const ReviewSection = ({
     }
   };
 
-  const handleRemovePhoto = (index: number) => {
-    setPromoPhotos(prev => prev.filter((_, i) => i !== index));
-  };
-
   const handleGenerateEmail = async () => {
     try {
       setIsGenerating(true);
@@ -106,16 +101,16 @@ export const ReviewSection = ({
       const { data, error } = await supabase.functions.invoke('generate-email', {
         body: { 
           promotion: promotionText,
-          promoPhotos,
-          restaurantName,
+          promoPhotos: promoPhotos,
+          restaurantName: restaurantName,
           websiteUrl: preferences.websiteUrl || '',
           facebookUrl: preferences.facebookUrl || '',
           instagramUrl: preferences.instagramUrl || '',
           phoneNumber: preferences.phoneNumber || '',
           bookingUrl: preferences.bookingUrl || '',
           preferredBookingMethod: preferences.preferredBookingMethod || 'phone',
-          googleMapsUrl,
-          uniqueReward
+          googleMapsUrl: googleMapsUrl,
+          uniqueReward: uniqueReward
         },
       });
 
@@ -151,6 +146,7 @@ export const ReviewSection = ({
       description: "Opening email preview with your content.",
     });
 
+    // Create email preview
     const recipients = ['preview@eatup.co'];
     const subject = encodeURIComponent(`${restaurantName} - Special Offer`);
     const body = encodeURIComponent(emailBody);
@@ -194,7 +190,6 @@ export const ReviewSection = ({
           isUploading={isAnalyzing}
           photos={promoPhotos}
           onFileSelect={handlePromoPhotoUpload}
-          onRemovePhoto={handleRemovePhoto}
         />
 
         <EmailGenerationSection 
