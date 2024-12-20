@@ -99,10 +99,6 @@ export type Database = {
           phone_number: string | null
           preferred_booking_method: string | null
           restaurant_name: string
-          website_description: string | null
-          website_gallery: Json | null
-          website_hero_image: string | null
-          website_menu_sections: Json | null
           website_url: string | null
         }
         Insert: {
@@ -116,10 +112,6 @@ export type Database = {
           phone_number?: string | null
           preferred_booking_method?: string | null
           restaurant_name: string
-          website_description?: string | null
-          website_gallery?: Json | null
-          website_hero_image?: string | null
-          website_menu_sections?: Json | null
           website_url?: string | null
         }
         Update: {
@@ -133,10 +125,6 @@ export type Database = {
           phone_number?: string | null
           preferred_booking_method?: string | null
           restaurant_name?: string
-          website_description?: string | null
-          website_gallery?: Json | null
-          website_hero_image?: string | null
-          website_menu_sections?: Json | null
           website_url?: string | null
         }
         Relationships: []
@@ -327,45 +315,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      restaurant_websites: {
-        Row: {
-          contact_info: Json | null
-          created_at: string
-          gallery: Json | null
-          hero_image: string | null
-          id: string
-          menu_sections: Json | null
-          restaurant_name: string
-          slug: string
-          theme_color: string | null
-          website_content: Json
-        }
-        Insert: {
-          contact_info?: Json | null
-          created_at?: string
-          gallery?: Json | null
-          hero_image?: string | null
-          id?: string
-          menu_sections?: Json | null
-          restaurant_name: string
-          slug: string
-          theme_color?: string | null
-          website_content?: Json
-        }
-        Update: {
-          contact_info?: Json | null
-          created_at?: string
-          gallery?: Json | null
-          hero_image?: string | null
-          id?: string
-          menu_sections?: Json | null
-          restaurant_name?: string
-          slug?: string
-          theme_color?: string | null
-          website_content?: Json
-        }
-        Relationships: []
       }
       restaurants: {
         Row: {

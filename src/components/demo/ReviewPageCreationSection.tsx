@@ -19,29 +19,25 @@ export const ReviewPageCreationSection = ({ restaurantName, googleMapsUrl }: Rev
             <Building2 className="h-6 w-6 md:h-8 md:w-8 text-primary" />
           </div>
           <h2 className="text-xl md:text-2xl font-bold text-gray-900">
-            Create Your EatUP! Website
+            Create Your Review Page
           </h2>
           <p className="text-sm md:text-base text-gray-600">
-            Get started with your own personalized website. Perfect for restaurants looking to establish their online presence and collect customer feedback.
+            Get started with your own personalized review collection page. Perfect for restaurants looking to gather authentic customer feedback.
           </p>
           <div className="space-y-4 text-left border-t border-gray-100 pt-4 mt-4">
             <h3 className="font-semibold text-gray-800">What You'll Get:</h3>
             <ol className="space-y-3 text-sm text-gray-600">
               <li className="flex gap-2">
                 <span className="font-semibold text-primary">1.</span>
-                A professionally designed website with your branding
+                A custom-branded review collection page for your restaurant
               </li>
               <li className="flex gap-2">
                 <span className="font-semibold text-primary">2.</span>
-                Integrated review collection system
+                Your own eatup.co URL to share with customers
               </li>
               <li className="flex gap-2">
                 <span className="font-semibold text-primary">3.</span>
-                Menu display and photo gallery
-              </li>
-              <li className="flex gap-2">
-                <span className="font-semibold text-primary">4.</span>
-                Contact information and booking links
+                Preview of how your review system will work
               </li>
             </ol>
           </div>
