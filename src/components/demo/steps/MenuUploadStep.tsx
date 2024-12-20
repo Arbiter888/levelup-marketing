@@ -1,5 +1,5 @@
 import { ReceiptUploadSection } from "../ReceiptUploadSection";
-import { FileText } from "lucide-react";
+import { Menu } from "lucide-react";
 
 interface MenuUploadStepProps {
   isAnalyzing: boolean;
@@ -11,13 +11,14 @@ export const MenuUploadStep = ({ isAnalyzing, menuData, onFileSelect }: MenuUplo
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2 text-lg font-semibold text-primary">
-        <FileText className="h-5 w-5" />
-        <h3>Step 2: Share your latest menu</h3>
+        <Menu className="h-5 w-5" />
+        <h3>Step 2: Upload your menu</h3>
       </div>
       <ReceiptUploadSection 
         onFileSelect={onFileSelect}
         isAnalyzing={isAnalyzing}
-        analysisResult={menuData}
+        analysisResult={menuData !== null}
+        successMessage="Menu uploaded successfully!"
       />
     </div>
   );

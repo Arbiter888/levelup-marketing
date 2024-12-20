@@ -18,6 +18,7 @@ export const PromoPhotosStep = ({ isUploading, photos, onFileSelect }: PromoPhot
         onFileSelect={onFileSelect}
         isAnalyzing={isUploading}
         analysisResult={photos.length > 0}
+        successMessage="Food photo uploaded successfully!"
       />
       {photos.length > 0 && (
         <div className="grid grid-cols-2 gap-4">

@@ -1,74 +1,57 @@
-import { Input } from "@/components/ui/input";
-import { Camera, Upload, Image, CheckCircle2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import { Upload } from "lucide-react";
 
 interface ReceiptUploadSectionProps {
   onFileSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
   isAnalyzing: boolean;
-  analysisResult?: any;
+  analysisResult: boolean;
+  successMessage?: string;
 }
 
-export const ReceiptUploadSection = ({ onFileSelect, isAnalyzing, analysisResult }: ReceiptUploadSectionProps) => {
-  const triggerFileInput = () => {
-    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
-    if (fileInput) {
-      fileInput.click();
+export const ReceiptUploadSection = ({ 
+  onFileSelect, 
+  isAnalyzing, 
+  analysisResult,
+  successMessage = "Receipt uploaded successfully!"
+}: ReceiptUploadSectionProps) => {
+  const { toast } = useToast();
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      onFileSelect(event);
+      toast({
+        title: "✅ Success!",
+        description: successMessage,
+      });
     }
   };
 
-  const isUploaded = !!analysisResult;
-
   return (
-    <div className="grid gap-4">
-      <label className={`relative flex flex-col items-center justify-center h-32 rounded-lg border-2 border-dashed transition-colors cursor-pointer ${
-        isUploaded 
-          ? 'border-green-500 bg-green-50 hover:bg-green-100/80' 
-          : 'border-primary/20 bg-white/50 hover:bg-white/80'
-      }`}>
-        <Input
-          type="file"
-          accept="image/*"
-          onChange={onFileSelect}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+    <div className="space-y-4">
+      <div className="flex justify-center">
+        <Button
+          variant="outline"
+          className={`w-full max-w-md relative ${
+            analysisResult ? "bg-green-50" : ""
+          }`}
           disabled={isAnalyzing}
-        />
-        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-          {isUploaded ? (
-            <>
-              <CheckCircle2 className="h-10 w-10 text-green-500 mb-2" />
-              <p className="text-sm text-green-600">
-                Receipt uploaded successfully!
-              </p>
-            </>
+        >
+          <input
+            type="file"
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            onChange={handleFileChange}
+            accept="image/*"
+          />
+          <Upload className="mr-2 h-4 w-4" />
+          {isAnalyzing ? (
+            "Uploading..."
+          ) : analysisResult ? (
+            "Upload another"
           ) : (
-            <>
-              <Upload className="h-10 w-10 text-primary mb-2" />
-              <p className="text-sm text-muted-foreground">
-                Click to upload or drag and drop your receipt
-              </p>
-            </>
+            "Upload file"
           )}
-        </div>
-      </label>
-
-      <div className="grid grid-cols-2 gap-4">
-        <Button
-          variant="outline"
-          className="w-full flex items-center justify-center gap-2"
-          onClick={triggerFileInput}
-          disabled={isAnalyzing}
-        >
-          <Image className="h-4 w-4" />
-          Choose from Library
-        </Button>
-        <Button
-          variant="outline"
-          className="w-full flex items-center justify-center gap-2"
-          onClick={triggerFileInput}
-          disabled={isAnalyzing}
-        >
-          <Camera className="h-4 w-4" />
-          Take a Photo
         </Button>
       </div>
     </div>
