@@ -9,6 +9,7 @@ import { EmailPreviewStep } from "./steps/EmailPreviewStep";
 import { DemoPreferences } from "./DemoPreferences";
 import { AiFeedbackSection } from "./AiFeedbackSection";
 import { EmailGenerationSection } from "./steps/EmailGenerationSection";
+import { EmailCampaignIntro } from "./steps/EmailCampaignIntro";
 import { nanoid } from 'nanoid';
 
 interface ReviewSectionProps {
@@ -40,15 +41,18 @@ export const ReviewSection = ({
   const [promoPhotos, setPromoPhotos] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [rewardCode, setRewardCode] = useState<string | null>(null);
-  const [googleMapsUrl, setGoogleMapsUrl] = useState(customGoogleMapsUrl || "https://maps.app.goo.gl/Nx23mQHet4TBfctJ6");
-  const [restaurantName, setRestaurantName] = useState(customRestaurantName || "The Local Kitchen & Bar");
+  const [googleMapsUrl, setGoogleMapsUrl] = useState(customGoogleMapsUrl || "");
+  const [restaurantName, setRestaurantName] = useState(customRestaurantName || "");
   const [preferences, setPreferences] = useState<DemoPreferences>({});
   const { toast } = useToast();
 
   useEffect(() => {
     const savedPreferences = localStorage.getItem('demoPreferences');
     if (savedPreferences) {
-      setPreferences(JSON.parse(savedPreferences));
+      const parsedPrefs = JSON.parse(savedPreferences);
+      setPreferences(parsedPrefs);
+      setRestaurantName(parsedPrefs.restaurantName || "");
+      setGoogleMapsUrl(parsedPrefs.googleMapsUrl || "");
     }
   }, []);
 
@@ -134,26 +138,6 @@ export const ReviewSection = ({
     }
   };
 
-  const handlePreviewEmail = () => {
-    const uniqueCode = nanoid(8);
-    setRewardCode(uniqueCode);
-    
-    const emailBody = emailCopy.replace('[UNIQUE_CODE]', uniqueCode);
-    navigator.clipboard.writeText(emailBody);
-    
-    toast({
-      title: "Email preview ready!",
-      description: "Opening email preview with your content.",
-    });
-
-    // Create email preview
-    const recipients = ['preview@eatup.co'];
-    const subject = encodeURIComponent(`${restaurantName} - Special Offer`);
-    const body = encodeURIComponent(emailBody);
-    const mailtoLink = `mailto:${recipients.join(',')}?subject=${subject}&body=${body}`;
-    window.location.href = mailtoLink;
-  };
-
   return (
     <Card>
       <CardContent className="space-y-8 pt-6">
@@ -161,20 +145,7 @@ export const ReviewSection = ({
           <DemoPreferences onPreferencesSaved={handlePreferencesSaved} />
         )}
         
-        <div className="text-center">
-          <div className="space-y-2">
-            <p className="text-lg font-medium text-primary">
-              Create Your Email Campaign! 📧
-            </p>
-            <div className="text-gray-600">
-              <p>Create an engaging email campaign in 3 simple steps:</p>
-              <p>1. Share your promotional message or special offerings</p>
-              <p>2. Enter an exclusive reward for your customers</p>
-              <p>3. Add high-quality photos of your products or services</p>
-              <p className="text-primary mt-2">Preview your email and start engaging with your customers!</p>
-            </div>
-          </div>
-        </div>
+        <EmailCampaignIntro />
 
         <PromotionStep 
           promotionText={promotionText}
@@ -201,7 +172,6 @@ export const ReviewSection = ({
         <EmailPreviewStep 
           emailCopy={emailCopy}
           isGenerating={isGenerating}
-          onPreviewEmail={handlePreviewEmail}
           restaurantName={restaurantName}
           websiteUrl={preferences.websiteUrl}
           facebookUrl={preferences.facebookUrl}

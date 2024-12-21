@@ -20,7 +20,7 @@ export const RewardStep = ({ uniqueReward, setUniqueReward }: RewardStepProps) =
         className="bg-white/50"
       />
       <p className="text-sm text-gray-600">
-        This reward will be shown to customers when they complete their review
+        This reward will be included in the email with a unique code that customers can show when they visit your business
       </p>
     </div>
   );
