@@ -3,8 +3,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 interface BasicInfoStepProps {
-  businessName: string;
-  setBusinessName: (value: string) => void;
+  restaurantName: string;
+  setRestaurantName: (value: string) => void;
   googleMapsUrl: string;
   setGoogleMapsUrl: (value: string) => void;
   contactEmail: string;
@@ -16,8 +16,8 @@ interface BasicInfoStepProps {
 }
 
 export const BasicInfoStep = ({
-  businessName,
-  setBusinessName,
+  restaurantName,
+  setRestaurantName,
   googleMapsUrl,
   setGoogleMapsUrl,
   contactEmail,
@@ -33,8 +33,8 @@ export const BasicInfoStep = ({
         <Label htmlFor="businessName">Business Name</Label>
         <Input
           id="businessName"
-          value={businessName}
-          onChange={(e) => setBusinessName(e.target.value)}
+          value={restaurantName}
+          onChange={(e) => setRestaurantName(e.target.value)}
           placeholder="Enter your business name"
         />
       </div>

@@ -22,6 +22,7 @@ export const DemoPreferences = ({ onPreferencesSaved }: DemoPreferencesProps) =>
   const [bookingUrl, setBookingUrl] = useState("");
   const [preferredBookingMethod, setPreferredBookingMethod] = useState("phone");
   const [uniqueReward, setUniqueReward] = useState("");
+  const [businessDescription, setBusinessDescription] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
@@ -40,15 +41,16 @@ export const DemoPreferences = ({ onPreferencesSaved }: DemoPreferencesProps) =>
       setBookingUrl(preferences.bookingUrl || "");
       setPreferredBookingMethod(preferences.preferredBookingMethod || "phone");
       setUniqueReward(preferences.uniqueReward || "");
+      setBusinessDescription(preferences.businessDescription || "");
       onPreferencesSaved(preferences.restaurantName, preferences.googleMapsUrl, preferences.contactEmail || "");
     }
   }, [onPreferencesSaved]);
 
   const handleSavePreferences = () => {
-    if (!restaurantName.trim() || !googleMapsUrl.trim()) {
+    if (!restaurantName.trim() || !googleMapsUrl.trim() || !businessDescription.trim()) {
       toast({
         title: "Missing information",
-        description: "Please provide both restaurant name and Google Maps URL.",
+        description: "Please provide your business name, location, and description.",
         variant: "destructive",
       });
       return;
@@ -67,6 +69,7 @@ export const DemoPreferences = ({ onPreferencesSaved }: DemoPreferencesProps) =>
         bookingUrl,
         preferredBookingMethod,
         uniqueReward,
+        businessDescription,
       };
       
       localStorage.setItem('demoPreferences', JSON.stringify(preferences));
@@ -104,6 +107,8 @@ export const DemoPreferences = ({ onPreferencesSaved }: DemoPreferencesProps) =>
         setContactEmail={setContactEmail}
         websiteUrl={websiteUrl}
         setWebsiteUrl={setWebsiteUrl}
+        businessDescription={businessDescription}
+        setBusinessDescription={setBusinessDescription}
       />
 
       <SocialMediaStep
