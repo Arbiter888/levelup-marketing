@@ -11,8 +11,8 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
     <section className="relative py-12 md:py-20">
       <div className="absolute inset-0 overflow-hidden">
         <img
-          src="/lovable-uploads/022207d7-8d69-4714-9c28-702011f6f8f3.png"
-          alt="Restaurant atmosphere"
+          src="/lovable-uploads/1488590528505-98d2b5aba04b.png"
+          alt="Modern business technology"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-[#FFE5ED]/80 to-[#FFD5E2]/70" />
@@ -27,7 +27,7 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
         >
           <img 
             src="/lovable-uploads/50980a14-589f-4bd1-8267-536c582ff4e1.png" 
-            alt="EatUP! Logo" 
+            alt="levelUP! Logo" 
             className="h-16 md:h-28 w-auto hover:scale-105 transition-transform duration-300"
           />
         </motion.div>
@@ -38,7 +38,7 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-3xl md:text-5xl font-bold tracking-tight mb-4 md:mb-6 bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#1EAEDB] text-transparent bg-clip-text px-6 md:px-12 leading-tight pb-1"
         >
-          Your Restaurant's Smart Online Presence
+          Your Business's Smart Online Presence
         </motion.h1>
         
         <motion.p
@@ -47,7 +47,7 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="text-base md:text-xl text-muted-foreground mb-8 md:mb-12 max-w-2xl mx-auto px-2"
         >
-          Generate engaging email campaigns instantly, reward loyal customers automatically, and showcase your restaurant with a beautiful micro-website powered by AI reservations
+          Generate engaging email campaigns instantly, reward loyal customers automatically, and showcase your business with a beautiful micro-website powered by AI
         </motion.p>
 
         <motion.div

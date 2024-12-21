@@ -31,8 +31,8 @@ export const HeroSection = ({ onTryDemo, onShowAuth }: HeroSectionProps) => {
     <section className="relative min-h-[90vh] flex items-center bg-gradient-to-b from-white via-[#FFE5ED] to-[#FFD5E2]/20">
       <div className="absolute inset-0 overflow-hidden">
         <img
-          src="/lovable-uploads/1439337153520-7082a56a81f4.jpg"
-          alt="Modern business interior"
+          src="/lovable-uploads/1498050108023-c5249f4df085"
+          alt="Modern business workspace"
           className="w-full h-full object-cover opacity-20"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-white/90 to-white/50" />

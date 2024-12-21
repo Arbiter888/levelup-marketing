@@ -1,4 +1,4 @@
-import { Mail, Gift, Globe } from "lucide-react";
+import { Share2, Gift, Globe } from "lucide-react";
 
 export const FeatureCards = () => {
   return (
@@ -29,7 +29,7 @@ export const FeatureCards = () => {
         </div>
         <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3">Smart Micro-Websites</h3>
         <p className="text-sm md:text-base text-muted-foreground">
-          Create a stunning micro-website with integrated AI reservations that helps you take bookings 24/7 and showcase your restaurant
+          Create a stunning micro-website with integrated AI bookings that helps you take appointments 24/7 and showcase your business
         </p>
       </div>
     </div>
