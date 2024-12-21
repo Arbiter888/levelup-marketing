@@ -463,6 +463,62 @@ export type Database = {
         }
         Relationships: []
       }
+      review_page_analytics: {
+        Row: {
+          avg_review_length: number | null
+          created_at: string | null
+          id: string
+          last_viewed_at: string | null
+          link_clicks: number | null
+          page_views: number | null
+          qr_code_scans: number | null
+          receipts_uploaded: number | null
+          review_page_id: string
+          review_submissions: number | null
+          reviews_submitted: number | null
+          total_refined_reviews: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          avg_review_length?: number | null
+          created_at?: string | null
+          id?: string
+          last_viewed_at?: string | null
+          link_clicks?: number | null
+          page_views?: number | null
+          qr_code_scans?: number | null
+          receipts_uploaded?: number | null
+          review_page_id: string
+          review_submissions?: number | null
+          reviews_submitted?: number | null
+          total_refined_reviews?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          avg_review_length?: number | null
+          created_at?: string | null
+          id?: string
+          last_viewed_at?: string | null
+          link_clicks?: number | null
+          page_views?: number | null
+          qr_code_scans?: number | null
+          receipts_uploaded?: number | null
+          review_page_id?: string
+          review_submissions?: number | null
+          reviews_submitted?: number | null
+          total_refined_reviews?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_page_analytics_review_page_id_fkey"
+            columns: ["review_page_id"]
+            isOneToOne: false
+            referencedRelation: "review_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       review_pages: {
         Row: {
           active: boolean | null
@@ -519,6 +575,9 @@ export type Database = {
           created_at: string
           id: string
           photo_url: string | null
+          receipt_data: Json | null
+          refined_review: string | null
+          review_page_id: string | null
           review_text: string
           server_name: string | null
           status: string | null
@@ -529,6 +588,9 @@ export type Database = {
           created_at?: string
           id?: string
           photo_url?: string | null
+          receipt_data?: Json | null
+          refined_review?: string | null
+          review_page_id?: string | null
           review_text: string
           server_name?: string | null
           status?: string | null
@@ -539,12 +601,23 @@ export type Database = {
           created_at?: string
           id?: string
           photo_url?: string | null
+          receipt_data?: Json | null
+          refined_review?: string | null
+          review_page_id?: string | null
           review_text?: string
           server_name?: string | null
           status?: string | null
           unique_code?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "reviews_review_page_id_fkey"
+            columns: ["review_page_id"]
+            isOneToOne: false
+            referencedRelation: "review_pages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       saved_plans: {
         Row: {
