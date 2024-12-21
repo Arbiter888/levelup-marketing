@@ -26,7 +26,7 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
       if (!savedPreferences) {
         toast({
           title: "Missing preferences",
-          description: "Please set your restaurant preferences first.",
+          description: "Please set your business preferences first.",
           variant: "destructive",
         });
         return;
@@ -34,7 +34,7 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
 
       const preferences = JSON.parse(savedPreferences);
       const { 
-        restaurantName, 
+        businessName: restaurantName, 
         googleMapsUrl, 
         contactEmail,
         websiteUrl,
@@ -42,13 +42,14 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
         instagramUrl,
         phoneNumber,
         bookingUrl,
-        preferredBookingMethod 
+        preferredBookingMethod,
+        businessDescription 
       } = preferences;
 
-      if (!restaurantName || !googleMapsUrl) {
+      if (!restaurantName || !googleMapsUrl || !businessDescription) {
         toast({
           title: "Missing preferences",
-          description: "Please set your restaurant preferences first.",
+          description: "Please set your business name, location, and description first.",
           variant: "destructive",
         });
         return;
@@ -70,7 +71,8 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
               instagram_url: instagramUrl,
               phone_number: phoneNumber,
               booking_url: bookingUrl,
-              preferred_booking_method: preferredBookingMethod
+              preferred_booking_method: preferredBookingMethod,
+              business_description: businessDescription
             }
           }
         ])

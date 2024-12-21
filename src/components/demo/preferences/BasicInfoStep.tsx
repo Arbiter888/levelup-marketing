@@ -1,36 +1,52 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 interface BasicInfoStepProps {
-  restaurantName: string;
-  setRestaurantName: (value: string) => void;
+  businessName: string;
+  setBusinessName: (value: string) => void;
   googleMapsUrl: string;
   setGoogleMapsUrl: (value: string) => void;
   contactEmail: string;
   setContactEmail: (value: string) => void;
   websiteUrl: string;
   setWebsiteUrl: (value: string) => void;
+  businessDescription: string;
+  setBusinessDescription: (value: string) => void;
 }
 
 export const BasicInfoStep = ({
-  restaurantName,
-  setRestaurantName,
+  businessName,
+  setBusinessName,
   googleMapsUrl,
   setGoogleMapsUrl,
   contactEmail,
   setContactEmail,
   websiteUrl,
   setWebsiteUrl,
+  businessDescription,
+  setBusinessDescription,
 }: BasicInfoStepProps) => {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="restaurantName">Restaurant Name</Label>
+        <Label htmlFor="businessName">Business Name</Label>
         <Input
-          id="restaurantName"
-          value={restaurantName}
-          onChange={(e) => setRestaurantName(e.target.value)}
-          placeholder="Enter your restaurant name"
+          id="businessName"
+          value={businessName}
+          onChange={(e) => setBusinessName(e.target.value)}
+          placeholder="Enter your business name"
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="businessDescription">Business Description</Label>
+        <Textarea
+          id="businessDescription"
+          value={businessDescription}
+          onChange={(e) => setBusinessDescription(e.target.value)}
+          placeholder="Describe your business (e.g., type of business, what you offer, etc.)"
+          className="min-h-[100px]"
         />
       </div>
       
