@@ -64,7 +64,9 @@ export const BasicInfoStep = ({
         throw new Error('No enhanced text received from the API');
       }
 
+      // Update the business description state with the enhanced text
       setBusinessDescription(data.enhancedText);
+      
       toast({
         title: "Description enhanced!",
         description: "Your business description has been professionally improved.",
