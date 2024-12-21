@@ -12,8 +12,11 @@ export const PromoPhotosStep = ({ isUploading, photos, onFileSelect }: PromoPhot
     <div className="space-y-4">
       <div className="flex items-center gap-2 text-lg font-semibold text-primary">
         <Image className="h-5 w-5" />
-        <h3>Step 3: Upload food photos to promote</h3>
+        <h3>Step 3: Upload photos to promote</h3>
       </div>
+      <p className="text-sm text-gray-600">
+        Add product photos, service images, or any visuals that showcase your business
+      </p>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
