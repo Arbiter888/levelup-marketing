@@ -33,7 +33,7 @@ export const ReviewPageCreationSection = ({ restaurantName, googleMapsUrl }: Rev
               </li>
               <li className="flex gap-2">
                 <span className="font-semibold text-primary">2.</span>
-                Your own eatup.co URL to share with customers
+                Your own levelUP! URL to share with customers
               </li>
               <li className="flex gap-2">
                 <span className="font-semibold text-primary">3.</span>

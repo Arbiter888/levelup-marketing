@@ -79,21 +79,25 @@ export const MicroWebsite = ({ slug }: { slug: string }) => {
   }
 
   const { restaurant_name, website_content } = websiteData;
+  const businessDescription = website_content.business_description || '';
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-pink-50/20">
       <HeroSection 
-        restaurantName={restaurant_name}
+        businessName={restaurant_name}
         onBookTable={handleAiBooking}
+        businessDescription={businessDescription}
       />
 
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-12">
         <ContactSection websiteContent={website_content} />
         
-        <RewardSection uniqueReward="10% off your next visit when you dine with us" />
+        {website_content.unique_reward && (
+          <RewardSection uniqueReward={website_content.unique_reward} />
+        )}
 
         <div className="space-y-6">
-          <h2 className="text-2xl font-semibold text-gray-800 text-center">What Our Guests Say</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 text-center">What Our Customers Say</h2>
           <ExampleReviews />
         </div>
 
