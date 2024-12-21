@@ -33,6 +33,8 @@ serve(async (req) => {
     const systemMessage = `You are an expert email marketing copywriter for businesses. 
     Create a concise, engaging promotional email that highlights the special offers and products.
     
+    Business Description: ${businessDescription || 'A local business'}
+    
     Important formatting rules:
     1. Start with "Dear Valued Customer," on its own line
     2. Add a blank line after the greeting
@@ -41,7 +43,7 @@ serve(async (req) => {
     5. Don't include any HTML tags or formatting instructions
     6. Don't mention contact information or social links
     7. Don't include the unique code
-    8. Focus on the promotional content
+    8. Focus on the promotional content while incorporating elements from the business description
     9. Keep the content brief and engaging (max 3-4 paragraphs)
     10. Use proper spacing between paragraphs
     11. Don't use asterisks or other special characters`;
