@@ -168,9 +168,9 @@ export const ReviewSection = ({
             </p>
             <div className="text-gray-600">
               <p>Create an engaging email campaign in 3 simple steps:</p>
-              <p>1. Share your promotion or menu highlights</p>
-              <p>2. Enter the reward for customers</p>
-              <p>3. Add appetizing food photos</p>
+              <p>1. Share your promotional message or special offerings</p>
+              <p>2. Enter an exclusive reward for your customers</p>
+              <p>3. Add high-quality photos of your products or services</p>
               <p className="text-primary mt-2">Preview your email and start engaging with your customers!</p>
             </div>
           </div>
