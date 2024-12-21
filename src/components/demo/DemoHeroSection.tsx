@@ -19,27 +19,23 @@ export const DemoHeroSection = ({ onSurveyDemo }: DemoHeroSectionProps) => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 text-center relative">
-        <motion.div
+        <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="w-full flex justify-center mb-6 md:mb-8"
+          className="text-4xl md:text-6xl font-bold mb-6 md:mb-8"
         >
-          <img 
-            src="/lovable-uploads/50980a14-589f-4bd1-8267-536c582ff4e1.png" 
-            alt="levelUP! Logo" 
-            className="h-16 md:h-28 w-auto hover:scale-105 transition-transform duration-300"
-          />
-        </motion.div>
+          Welcome to levelUP! 🚀
+        </motion.h1>
         
-        <motion.h1
+        <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-3xl md:text-5xl font-bold tracking-tight mb-4 md:mb-6 bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#1EAEDB] text-transparent bg-clip-text px-6 md:px-12 leading-tight pb-1"
         >
           Your Business's Smart Online Presence
-        </motion.h1>
+        </motion.h2>
         
         <motion.p
           initial={{ opacity: 0, y: 20 }}
