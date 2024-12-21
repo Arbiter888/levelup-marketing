@@ -1,6 +1,11 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Wand2 } from "lucide-react";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface BasicInfoStepProps {
   restaurantName: string;
@@ -27,6 +32,46 @@ export const BasicInfoStep = ({
   businessDescription,
   setBusinessDescription,
 }: BasicInfoStepProps) => {
+  const [isEnhancing, setIsEnhancing] = useState(false);
+  const { toast } = useToast();
+
+  const handleEnhanceDescription = async () => {
+    if (!businessDescription.trim()) {
+      toast({
+        title: "Empty description",
+        description: "Please enter a business description first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setIsEnhancing(true);
+      const { data, error } = await supabase.functions.invoke('enhance-description', {
+        body: { description: businessDescription },
+      });
+
+      if (error) throw error;
+
+      if (data.enhancedText) {
+        setBusinessDescription(data.enhancedText);
+        toast({
+          title: "Description enhanced!",
+          description: "Your business description has been professionally improved.",
+        });
+      }
+    } catch (error) {
+      console.error('Error enhancing description:', error);
+      toast({
+        title: "Error",
+        description: "Failed to enhance description. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsEnhancing(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -41,13 +86,24 @@ export const BasicInfoStep = ({
       
       <div className="space-y-2">
         <Label htmlFor="businessDescription">Business Description</Label>
-        <Textarea
-          id="businessDescription"
-          value={businessDescription}
-          onChange={(e) => setBusinessDescription(e.target.value)}
-          placeholder="Describe your business (e.g., type of business, what you offer, etc.)"
-          className="min-h-[100px]"
-        />
+        <div className="space-y-2">
+          <Textarea
+            id="businessDescription"
+            value={businessDescription}
+            onChange={(e) => setBusinessDescription(e.target.value)}
+            placeholder="Describe your business (e.g., type of business, what you offer, etc.)"
+            className="min-h-[100px]"
+          />
+          <Button 
+            onClick={handleEnhanceDescription}
+            disabled={isEnhancing}
+            variant="outline"
+            className="w-full"
+          >
+            <Wand2 className="w-4 h-4 mr-2" />
+            {isEnhancing ? "Enhancing..." : "Enhance Description with AI"}
+          </Button>
+        </div>
       </div>
       
       <div className="space-y-2">
