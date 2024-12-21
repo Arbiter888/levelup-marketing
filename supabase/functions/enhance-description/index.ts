@@ -15,7 +15,14 @@ serve(async (req) => {
 
   try {
     const { description } = await req.json();
+    console.log('Received description:', description);
 
+    if (!openAIApiKey) {
+      console.error('OpenAI API key not found');
+      throw new Error('OpenAI API key not configured');
+    }
+
+    console.log('Making request to OpenAI API...');
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -38,13 +45,24 @@ serve(async (req) => {
     });
 
     const data = await response.json();
+    console.log('OpenAI API response:', data);
+
+    if (!response.ok) {
+      throw new Error(data.error?.message || 'Failed to get response from OpenAI');
+    }
+
     const enhancedText = data.choices[0].message.content;
+    console.log('Enhanced text:', enhancedText);
 
     return new Response(JSON.stringify({ enhancedText }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+    console.error('Error in enhance-description function:', error);
+    return new Response(JSON.stringify({ 
+      error: error.message,
+      details: error.toString()
+    }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

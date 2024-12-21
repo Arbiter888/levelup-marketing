@@ -47,24 +47,33 @@ export const BasicInfoStep = ({
 
     try {
       setIsEnhancing(true);
+      console.log('Sending description to enhance:', businessDescription);
+      
       const { data, error } = await supabase.functions.invoke('enhance-description', {
         body: { description: businessDescription },
       });
 
-      if (error) throw error;
+      console.log('Response from enhance-description:', { data, error });
 
-      if (data.enhancedText) {
-        setBusinessDescription(data.enhancedText);
-        toast({
-          title: "Description enhanced!",
-          description: "Your business description has been professionally improved.",
-        });
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw error;
       }
+
+      if (!data?.enhancedText) {
+        throw new Error('No enhanced text received from the API');
+      }
+
+      setBusinessDescription(data.enhancedText);
+      toast({
+        title: "Description enhanced!",
+        description: "Your business description has been professionally improved.",
+      });
     } catch (error) {
       console.error('Error enhancing description:', error);
       toast({
         title: "Error",
-        description: "Failed to enhance description. Please try again.",
+        description: error.message || "Failed to enhance description. Please try again.",
         variant: "destructive",
       });
     } finally {
