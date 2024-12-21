@@ -24,16 +24,17 @@ serve(async (req) => {
       bookingUrl,
       preferredBookingMethod,
       googleMapsUrl,
-      uniqueReward
+      uniqueReward,
+      businessDescription
     } = await req.json()
 
     const uniqueCode = nanoid(8);
 
-    const systemMessage = `You are an expert email marketing copywriter for restaurants. 
-    Create a concise, engaging promotional email that highlights the special offers and menu items.
+    const systemMessage = `You are an expert email marketing copywriter for businesses. 
+    Create a concise, engaging promotional email that highlights the special offers and products.
     
     Important formatting rules:
-    1. Start with "Dear Food Lover," on its own line
+    1. Start with "Dear Valued Customer," on its own line
     2. Add a blank line after the greeting
     3. Write in plain text with proper paragraph breaks
     4. Keep paragraphs short and focused (2-3 sentences max)
@@ -52,7 +53,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4',
         messages: [
           { role: 'system', content: systemMessage },
           { role: 'user', content: `Create a brief, focused email marketing message for ${restaurantName} with this promotion: ${promotion}` }
@@ -80,7 +81,7 @@ serve(async (req) => {
     if (promoPhotos?.length > 0) {
       emailCopy += '\n\n<div style="margin: 2rem 0; text-align: center;">';
       emailCopy += promoPhotos.map((photo: string) => 
-        `<img src="${photo}" alt="Food at ${restaurantName}" style="max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px;">`
+        `<img src="${photo}" alt="Products at ${restaurantName}" style="max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px;">`
       ).join('\n');
       emailCopy += '</div>';
     }
@@ -94,7 +95,7 @@ serve(async (req) => {
             `<p style="margin: 0.5rem 0;"><a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">📞 ${phoneNumber}</a></p>` 
             : ''}
           ${googleMapsUrl ? 
-            `<p style="margin: 0.5rem 0;"><a href="${googleMapsUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">📍 Find us on Google Maps</a></p>`
+            `<p style="margin: 0.5rem 0;"><a href="${googleMapsUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">📍 Find us</a></p>`
             : ''}
         </div>
 

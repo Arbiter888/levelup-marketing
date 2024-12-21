@@ -34,7 +34,7 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
 
       const preferences = JSON.parse(savedPreferences);
       const { 
-        businessName: restaurantName, 
+        restaurantName, 
         googleMapsUrl, 
         contactEmail,
         websiteUrl,
@@ -48,8 +48,8 @@ export const CreateDemoButton = ({ onPageCreated }: CreateDemoButtonProps) => {
 
       if (!restaurantName || !googleMapsUrl || !businessDescription) {
         toast({
-          title: "Missing preferences",
-          description: "Please set your business name, location, and description first.",
+          title: "Missing information",
+          description: "Please provide your business name, location, and description.",
           variant: "destructive",
         });
         return;
