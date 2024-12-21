@@ -21,7 +21,7 @@ export const HeroSection = ({ onTryDemo, onShowAuth }: HeroSectionProps) => {
 
   const handleAuthClick = () => {
     if (isAuthenticated) {
-      navigate("/restaurants/dashboard");
+      navigate("/businesses/dashboard");
     } else {
       onShowAuth();
     }
@@ -31,8 +31,8 @@ export const HeroSection = ({ onTryDemo, onShowAuth }: HeroSectionProps) => {
     <section className="relative min-h-[90vh] flex items-center bg-gradient-to-b from-white via-[#FFE5ED] to-[#FFD5E2]/20">
       <div className="absolute inset-0 overflow-hidden">
         <img
-          src="/lovable-uploads/6531de12-4cc0-4531-85d2-84c8fa60226c.png"
-          alt="Restaurant atmosphere"
+          src="/lovable-uploads/1439337153520-7082a56a81f4.jpg"
+          alt="Modern business interior"
           className="w-full h-full object-cover opacity-20"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-white/90 to-white/50" />
@@ -42,27 +42,26 @@ export const HeroSection = ({ onTryDemo, onShowAuth }: HeroSectionProps) => {
         <div className="w-full flex justify-center mb-8">
           <img 
             src="/lovable-uploads/50980a14-589f-4bd1-8267-536c582ff4e1.png" 
-            alt="EatUP! Logo" 
+            alt="levelUP! Logo" 
             className="h-20 md:h-28 w-auto hover:scale-105 transition-transform duration-300"
           />
         </div>
         <h2 className="text-[#1a1060] text-2xl md:text-3xl font-bold mb-2">
-          EAT. EARN. SAVE.
+          ENGAGE. EARN. GROW.
         </h2>
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 text-transparent bg-clip-text px-6 md:px-12 leading-tight pb-1">
-          Transform Your Restaurant's Review Strategy
+          Transform Your Business's Online Strategy
         </h1>
         <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
-          Boost positive reviews, increase customer retention, and gather actionable feedback with our innovative AI-powered platform.
+          Boost customer engagement, increase retention, and gather actionable feedback with our innovative AI-powered platform.
         </p>
 
-        {/* Feature Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 fade-in glass-card">
             <div className="flex justify-center mb-4">
               <Star className="h-8 w-8 text-pink-500" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">Positive Review Acceleration</h3>
+            <h3 className="text-xl font-semibold mb-3">Review Acceleration</h3>
             <p className="text-gray-600 text-sm">
               Turn happy customers into brand advocates with AI-enhanced review generation and instant reward incentives
             </p>
@@ -72,9 +71,9 @@ export const HeroSection = ({ onTryDemo, onShowAuth }: HeroSectionProps) => {
             <div className="flex justify-center mb-4">
               <Gift className="h-8 w-8 text-pink-500" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">Revisit Rewards</h3>
+            <h3 className="text-xl font-semibold mb-3">Customer Rewards</h3>
             <p className="text-gray-600 text-sm">
-              Drive customer loyalty with our 4-visit reward program, turning first-time diners into regular patrons
+              Drive customer loyalty with our 4-visit reward program, turning first-time visitors into regular customers
             </p>
           </div>
 
@@ -89,14 +88,13 @@ export const HeroSection = ({ onTryDemo, onShowAuth }: HeroSectionProps) => {
           </div>
         </div>
 
-        {/* AI Survey Demo Section */}
         <div className="bg-white p-8 rounded-xl shadow-lg max-w-3xl mx-auto mb-12 glass-card">
           <div className="flex justify-center mb-4">
             <MessageCircle className="h-10 w-10 text-pink-500" />
           </div>
-          <h3 className="text-2xl font-semibold mb-4">EatUP! AI Customer Survey</h3>
+          <h3 className="text-2xl font-semibold mb-4">levelUP! AI Customer Survey</h3>
           <p className="text-gray-600 mb-6">
-            Experience our conversational AI that engages customers in natural dialogue, gathering comprehensive feedback about their dining experience while your staff focuses on service.
+            Experience our conversational AI that engages customers in natural dialogue, gathering comprehensive feedback about their experience while your staff focuses on service.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button

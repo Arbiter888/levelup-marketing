@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Footer = () => {
   const handleEmailClick = () => {
-    window.location.href = "mailto:george@multiplier.info?subject=Interest%20in%20EatUP!&body=Hi%2C%0A%0AI'm%20interested%20in%20learning%20more%20about%20EatUP!%0A%0ABest%20regards";
+    window.location.href = "mailto:george@multiplier.info?subject=Interest%20in%20levelUP!&body=Hi%2C%0A%0AI'm%20interested%20in%20learning%20more%20about%20levelUP!%0A%0ABest%20regards";
   };
 
   return (
@@ -34,7 +34,7 @@ export const Footer = () => {
             </a>
           </div>
           <p className="text-sm text-gray-500 text-center px-4">
-            © {new Date().getFullYear()} Multiplier Ltd trading as EatUP!. All rights reserved.
+            © {new Date().getFullYear()} Multiplier Ltd trading as levelUP!. All rights reserved.
           </p>
         </div>
       </div>

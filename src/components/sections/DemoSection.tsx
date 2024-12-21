@@ -9,11 +9,11 @@ interface DemoSectionProps {
 }
 
 export const DemoSection = ({ onSurveyCall }: DemoSectionProps) => {
-  const [restaurantName, setRestaurantName] = useState("The Local Kitchen & Bar");
+  const [businessName, setBusinessName] = useState("The Local Business");
   const [googleMapsUrl, setGoogleMapsUrl] = useState("https://maps.app.goo.gl/Nx23mQHet4TBfctJ6");
 
   const handlePreferencesSaved = (name: string, url: string) => {
-    setRestaurantName(name);
+    setBusinessName(name);
     setGoogleMapsUrl(url);
   };
 
@@ -21,7 +21,7 @@ export const DemoSection = ({ onSurveyCall }: DemoSectionProps) => {
     <section className="py-20 bg-gradient-to-b from-white to-[#FFE5ED]/20">
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-[#E94E87] via-[#F17BA3] to-[#FF9B9B] text-transparent bg-clip-text">
-          Experience EatUP!
+          Experience levelUP!
         </h2>
 
         <div className="mb-8 max-w-xl mx-auto">
@@ -32,8 +32,8 @@ export const DemoSection = ({ onSurveyCall }: DemoSectionProps) => {
           <div className="space-y-6">
             <div className="relative">
               <img
-                src="/lovable-uploads/f790e463-d057-4fec-b168-02e376930c1c.png"
-                alt="Dining experience"
+                src="/lovable-uploads/1486718448742-163732cd1544.jpg"
+                alt="Modern business environment"
                 className="rounded-lg shadow-xl"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-[#E94E87]/20 to-transparent rounded-lg" />
@@ -42,8 +42,8 @@ export const DemoSection = ({ onSurveyCall }: DemoSectionProps) => {
               Share Your Experience
             </h3>
             <p className="text-muted-foreground">
-              Try our innovative review system that makes sharing your dining experience easy and rewarding. 
-              Use text or voice to share your feedback and earn rewards from your favorite restaurants.
+              Try our innovative review system that makes sharing your customer experience easy and rewarding. 
+              Use text or voice to share your feedback and earn rewards from your favorite businesses.
             </p>
             <Button
               onClick={onSurveyCall}
@@ -55,8 +55,8 @@ export const DemoSection = ({ onSurveyCall }: DemoSectionProps) => {
           </div>
           <div className="bg-white p-6 rounded-xl shadow-xl">
             <ReviewCard
-              businessName={restaurantName}
-              businessImage="/lovable-uploads/23bef056-e873-4e3d-b77b-8ac3c49fa8d8.png"
+              businessName={businessName}
+              businessImage="/lovable-uploads/1487058792275-0ad4aaf24ca7.jpg"
               onTakeAiSurvey={onSurveyCall}
               googleMapsUrl={googleMapsUrl}
             />
