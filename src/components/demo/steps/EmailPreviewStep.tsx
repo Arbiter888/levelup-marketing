@@ -7,7 +7,6 @@ import { useToast } from "@/hooks/use-toast";
 interface EmailPreviewStepProps {
   emailCopy: string;
   isGenerating: boolean;
-  onPreviewEmail: () => void;
   restaurantName?: string;
   websiteUrl?: string;
   facebookUrl?: string;

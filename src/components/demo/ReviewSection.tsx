@@ -10,7 +10,6 @@ import { DemoPreferences } from "./DemoPreferences";
 import { AiFeedbackSection } from "./AiFeedbackSection";
 import { EmailGenerationSection } from "./steps/EmailGenerationSection";
 import { EmailCampaignIntro } from "./steps/EmailCampaignIntro";
-import { nanoid } from 'nanoid';
 
 interface ReviewSectionProps {
   customRestaurantName?: string;
