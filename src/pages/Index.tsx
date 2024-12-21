@@ -142,7 +142,7 @@ const Index = () => {
       <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-center mb-4">Welcome to EatUP!</DialogTitle>
+            <DialogTitle className="text-center mb-4">Welcome to levelUP! 🚀</DialogTitle>
           </DialogHeader>
           <Auth
             supabaseClient={supabase}
