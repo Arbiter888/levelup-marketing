@@ -22,7 +22,7 @@ export const ReviewPageCreationSection = ({ restaurantName, googleMapsUrl }: Rev
             Create Your Business's Micro-Website
           </h2>
           <p className="text-sm md:text-base text-gray-600">
-            Get started with your own personalized micro-website. Perfect for businesses looking to showcase their products and services online.
+            Get started with your own personalized micro-website. Perfect for businesses looking to showcase their offerings and connect with customers online.
           </p>
           <div className="space-y-4 text-left border-t border-gray-100 pt-4 mt-4">
             <h3 className="font-semibold text-gray-800">What You'll Get:</h3>

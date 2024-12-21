@@ -62,7 +62,6 @@ serve(async (req) => {
     })
 
     const data = await response.json()
-    console.log('OpenAI response:', data);
     
     let emailCopy = '<div style="margin-bottom: 2rem; line-height: 1.6; color: #333333;">';
     emailCopy += data.choices[0].message.content.replace(/\n/g, '<br>');

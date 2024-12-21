@@ -16,6 +16,8 @@ interface WebsiteContent {
   phone_number?: string;
   booking_url?: string;
   preferred_booking_method?: string;
+  business_description?: string;
+  unique_reward?: string;
 }
 
 interface WebsiteData {
