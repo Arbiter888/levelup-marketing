@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { Bot } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 
 interface HeroSectionProps {
   businessName: string;
-  onBookTable: () => void;
+  onBookTable?: () => void;
   businessDescription?: string;
 }
 
@@ -19,17 +19,16 @@ export const HeroSection = ({ businessName, onBookTable, businessDescription }: 
           </p>
         )}
         <div className="space-y-4">
-          <Button 
-            size="lg" 
-            className="bg-white text-primary hover:bg-white/90 flex items-center gap-2"
-            onClick={onBookTable}
-          >
-            <Bot className="w-5 h-5" />
-            Chat with our AI Assistant
-          </Button>
-          <p className="text-sm text-white/80 max-w-md">
-            Our AI assistant is available 24/7 to help answer your questions
-          </p>
+          {onBookTable && (
+            <Button 
+              size="lg" 
+              className="bg-white text-primary hover:bg-white/90 flex items-center gap-2"
+              onClick={onBookTable}
+            >
+              <CalendarDays className="h-5 w-5" />
+              Book a Table
+            </Button>
+          )}
         </div>
       </div>
     </div>

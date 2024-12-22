@@ -104,6 +104,7 @@ export type Database = {
           google_maps_url: string
           id: string
           restaurant_name: string
+          server_names: string[] | null
           slug: string
         }
         Insert: {
@@ -113,6 +114,7 @@ export type Database = {
           google_maps_url: string
           id?: string
           restaurant_name: string
+          server_names?: string[] | null
           slug: string
         }
         Update: {
@@ -122,6 +124,7 @@ export type Database = {
           google_maps_url?: string
           id?: string
           restaurant_name?: string
+          server_names?: string[] | null
           slug?: string
         }
         Relationships: []
@@ -138,6 +141,7 @@ export type Database = {
           phone_number: string | null
           preferred_booking_method: string | null
           restaurant_name: string
+          server_names: string[] | null
           website_description: string | null
           website_gallery: Json | null
           website_hero_image: string | null
@@ -155,6 +159,7 @@ export type Database = {
           phone_number?: string | null
           preferred_booking_method?: string | null
           restaurant_name: string
+          server_names?: string[] | null
           website_description?: string | null
           website_gallery?: Json | null
           website_hero_image?: string | null
@@ -172,6 +177,7 @@ export type Database = {
           phone_number?: string | null
           preferred_booking_method?: string | null
           restaurant_name?: string
+          server_names?: string[] | null
           website_description?: string | null
           website_gallery?: Json | null
           website_hero_image?: string | null
