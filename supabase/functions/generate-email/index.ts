@@ -39,7 +39,13 @@ serve(async (req) => {
     };
     
     const qrCodeDataString = JSON.stringify(qrCodeData);
-    const qrCodeImage = await QRCode.toDataURL(qrCodeDataString);
+    // Use toDataURL with options object instead of direct canvas
+    const qrCodeImage = await QRCode.toDataURL(qrCodeDataString, {
+      errorCorrectionLevel: 'H',
+      type: 'image/png',
+      margin: 1,
+      width: 300,
+    });
 
     const systemMessage = `You are an expert email marketing copywriter for businesses. 
     Create a concise, engaging promotional email that highlights the special offers and products.
