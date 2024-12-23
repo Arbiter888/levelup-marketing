@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { nanoid } from 'https://esm.sh/nanoid@5.0.4'
-import QRCode from 'https://esm.sh/qrcode@1.5.3'
+import * as QRCode from 'https://esm.sh/qrcode@1.5.3'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -38,14 +38,25 @@ serve(async (req) => {
       reward: uniqueReward
     };
     
+    console.log('Generating QR code with data:', qrCodeData);
     const qrCodeDataString = JSON.stringify(qrCodeData);
-    // Use toDataURL with options object instead of direct canvas
-    const qrCodeImage = await QRCode.toDataURL(qrCodeDataString, {
-      errorCorrectionLevel: 'H',
-      type: 'image/png',
-      margin: 1,
-      width: 300,
-    });
+    
+    let qrCodeImage;
+    try {
+      qrCodeImage = await QRCode.toDataURL(qrCodeDataString, {
+        errorCorrectionLevel: 'H',
+        type: 'image/png',
+        margin: 1,
+        width: 300,
+        rendererOpts: {
+          quality: 0.92
+        }
+      });
+      console.log('QR code generated successfully');
+    } catch (qrError) {
+      console.error('Error generating QR code:', qrError);
+      throw new Error(`QR code generation failed: ${qrError.message}`);
+    }
 
     const systemMessage = `You are an expert email marketing copywriter for businesses. 
     Create a concise, engaging promotional email that highlights the special offers and products.
