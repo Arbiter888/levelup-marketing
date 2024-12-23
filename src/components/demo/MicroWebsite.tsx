@@ -69,16 +69,21 @@ export const MicroWebsite = ({ slug }: MicroWebsiteProps) => {
       />
       <div className="max-w-7xl mx-auto px-4 py-12 grid gap-12">
         <ContactSection 
-          email={websiteData.website_content?.contact_email}
-          phone={websiteData.website_content?.phone_number}
+          websiteContent={{
+            contact_email: websiteData.website_content?.contact_email,
+            phone_number: websiteData.website_content?.phone_number,
+            google_maps_url: websiteData.website_content?.google_maps_url
+          }}
         />
         <LocationPreview googleMapsUrl={websiteData.website_content?.google_maps_url} />
         <SocialSection 
-          websiteUrl={websiteData.website_content?.website_url}
-          facebookUrl={websiteData.website_content?.facebook_url}
-          instagramUrl={websiteData.website_content?.instagram_url}
+          websiteContent={{
+            website_url: websiteData.website_content?.website_url,
+            facebook_url: websiteData.website_content?.facebook_url,
+            instagram_url: websiteData.website_content?.instagram_url
+          }}
         />
-        <RewardSection />
+        <RewardSection uniqueReward={websiteData.website_content?.unique_reward || "10% off your next visit"} />
       </div>
     </div>
   );
