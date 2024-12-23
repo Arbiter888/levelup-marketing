@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { nanoid } from 'https://esm.sh/nanoid@5.0.4'
+import QRCode from 'https://esm.sh/qrcode@1.5.3'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -29,6 +30,16 @@ serve(async (req) => {
     } = await req.json()
 
     const uniqueCode = nanoid(8);
+    
+    // Generate QR code for the reward
+    const qrCodeData = {
+      restaurantName,
+      uniqueCode,
+      reward: uniqueReward
+    };
+    
+    const qrCodeDataString = JSON.stringify(qrCodeData);
+    const qrCodeImage = await QRCode.toDataURL(qrCodeDataString);
 
     const systemMessage = `You are an expert email marketing copywriter for businesses. 
     Create a concise, engaging promotional email that highlights the special offers and products.
@@ -75,6 +86,10 @@ serve(async (req) => {
           <p style="color: #E94E87; font-weight: bold; margin-bottom: 0.5rem;">Special Reward for Your Next Visit!</p>
           <p style="margin: 0;">${uniqueReward}</p>
           <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">Show code: ${uniqueCode}</p>
+          <div style="margin-top: 1rem;">
+            <img src="${qrCodeImage}" alt="Reward QR Code" style="width: 150px; height: 150px;"/>
+            <p style="color: #666; font-size: 0.8rem; margin-top: 0.5rem;">Scan to save your reward</p>
+          </div>
         </div>
       `;
     }
