@@ -22,6 +22,10 @@ serve(async (req) => {
       throw new Error('OpenAI API key not configured');
     }
 
+    if (!description || description.trim().length === 0) {
+      throw new Error('Description is required');
+    }
+
     console.log('Making request to OpenAI API...');
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -30,15 +34,15 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',
-            content: 'You are a professional business writer. Enhance the given business description to make it more engaging, professional, and appealing to customers. Keep the same key information but improve the writing style. Keep it concise.'
+            content: 'You are a professional business writer. Your task is to enhance the given business description while maintaining its core information and unique characteristics. Keep the same type of business and key details, but make it more engaging and professional. The output should be concise (2-3 sentences) and maintain the original business type and key offerings.'
           },
           {
             role: 'user',
-            content: description
+            content: `Please enhance this business description while keeping its core identity and type: ${description}`
           }
         ],
       }),
