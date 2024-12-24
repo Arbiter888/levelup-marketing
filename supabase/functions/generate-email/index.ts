@@ -119,6 +119,13 @@ serve(async (req) => {
       emailCopy += '</div>';
     }
 
+    // Fix URL handling in the contact section
+    const formatUrl = (url: string) => {
+      if (!url) return '';
+      // Remove any trailing colons and ensure proper URL format
+      return url.replace(/:+$/, '').replace(/([^:])\/\/+/g, '$1/');
+    };
+
     emailCopy += `
       <div style="background-color: #f8f9fa; border-radius: 8px; padding: 1.5rem; margin-top: 2rem;">
         <h3 style="color: #333; margin: 0 0 1rem 0; font-size: 1.5rem;">${restaurantName}</h3>
@@ -128,15 +135,15 @@ serve(async (req) => {
             `<p style="margin: 0.5rem 0;"><a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">📞 ${phoneNumber}</a></p>` 
             : ''}
           ${googleMapsUrl ? 
-            `<p style="margin: 0.5rem 0;"><a href="${googleMapsUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">📍 Find us</a></p>`
+            `<p style="margin: 0.5rem 0;"><a href="${formatUrl(googleMapsUrl)}" target="_blank" style="color: #E94E87; text-decoration: none;">📍 Find us</a></p>`
             : ''}
         </div>
 
         ${(websiteUrl || facebookUrl || instagramUrl) ? 
           `<div style="margin: 1rem 0;">
-            ${websiteUrl ? `<a href="${websiteUrl}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">🌐 Visit our Website</a>` : ''}
-            ${facebookUrl ? `<a href="${facebookUrl}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">👥 Follow us on Facebook</a>` : ''}
-            ${instagramUrl ? `<a href="${instagramUrl}" target="_blank" style="color: #666; text-decoration: underline;">📸 Follow us on Instagram</a>` : ''}
+            ${websiteUrl ? `<a href="${formatUrl(websiteUrl)}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">🌐 Visit our Website</a>` : ''}
+            ${facebookUrl ? `<a href="${formatUrl(facebookUrl)}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">👥 Follow us on Facebook</a>` : ''}
+            ${instagramUrl ? `<a href="${formatUrl(instagramUrl)}" target="_blank" style="color: #666; text-decoration: underline;">📸 Follow us on Instagram</a>` : ''}
           </div>`
           : ''}
       </div>
