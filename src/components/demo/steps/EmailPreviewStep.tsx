@@ -72,7 +72,7 @@ export const EmailPreviewStep = ({
       const { error } = await supabase.functions.invoke('send-email', {
         body: {
           to: [contactEmail],
-          subject: '🎁 Your Special Offer is Here!',
+          subject: `🎁 Special Offer from ${restaurantName || 'Our Restaurant'}`,
           html: emailHtml,
         },
       });
