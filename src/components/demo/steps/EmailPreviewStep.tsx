@@ -122,7 +122,11 @@ export const EmailPreviewStep = ({
 
   return (
     <div className="space-y-4">
-      <EmailContent emailCopy={emailCopy} businessName={restaurantName} />
+      <EmailContent 
+        emailCopy={emailCopy} 
+        businessName={restaurantName}
+        htmlContent={localStorage.getItem('lastGeneratedHtmlEmail') || ''}
+      />
       <div className="flex gap-2">
         <EmailPreviewButton 
           onPreviewEmail={handlePreviewEmail} 
