@@ -1,7 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { nanoid } from 'https://esm.sh/nanoid@5.0.4'
-import * as QRCode from 'https://esm.sh/qrcode@1.5.3'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -30,33 +29,6 @@ serve(async (req) => {
     } = await req.json()
 
     const uniqueCode = nanoid(8);
-    
-    // Generate QR code for the reward
-    const qrCodeData = {
-      restaurantName,
-      uniqueCode,
-      reward: uniqueReward
-    };
-    
-    console.log('Generating QR code with data:', qrCodeData);
-    const qrCodeDataString = JSON.stringify(qrCodeData);
-    
-    let qrCodeImage;
-    try {
-      qrCodeImage = await QRCode.toDataURL(qrCodeDataString, {
-        errorCorrectionLevel: 'H',
-        type: 'image/png',
-        margin: 1,
-        width: 300,
-        rendererOpts: {
-          quality: 0.92
-        }
-      });
-      console.log('QR code generated successfully');
-    } catch (qrError) {
-      console.error('Error generating QR code:', qrError);
-      throw new Error(`QR code generation failed: ${qrError.message}`);
-    }
 
     const systemMessage = `You are an expert email marketing copywriter for businesses. 
     Create a concise, engaging promotional email that highlights the special offers and products.
@@ -103,10 +75,6 @@ serve(async (req) => {
           <p style="color: #E94E87; font-weight: bold; margin-bottom: 0.5rem;">Special Reward for Your Next Visit!</p>
           <p style="margin: 0;">${uniqueReward}</p>
           <p style="color: #666; font-size: 0.9rem; margin-top: 0.5rem;">Show code: ${uniqueCode}</p>
-          <div style="margin-top: 1rem;">
-            <img src="${qrCodeImage}" alt="Reward QR Code" style="width: 150px; height: 150px;"/>
-            <p style="color: #666; font-size: 0.8rem; margin-top: 0.5rem;">Scan to save your reward</p>
-          </div>
         </div>
       `;
     }
@@ -119,13 +87,6 @@ serve(async (req) => {
       emailCopy += '</div>';
     }
 
-    // Fix URL handling in the contact section
-    const formatUrl = (url: string) => {
-      if (!url) return '';
-      // Remove any trailing colons and ensure proper URL format
-      return url.replace(/:+$/, '').replace(/([^:])\/\/+/g, '$1/');
-    };
-
     emailCopy += `
       <div style="background-color: #f8f9fa; border-radius: 8px; padding: 1.5rem; margin-top: 2rem;">
         <h3 style="color: #333; margin: 0 0 1rem 0; font-size: 1.5rem;">${restaurantName}</h3>
@@ -135,15 +96,15 @@ serve(async (req) => {
             `<p style="margin: 0.5rem 0;"><a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">📞 ${phoneNumber}</a></p>` 
             : ''}
           ${googleMapsUrl ? 
-            `<p style="margin: 0.5rem 0;"><a href="${formatUrl(googleMapsUrl)}" target="_blank" style="color: #E94E87; text-decoration: none;">📍 Find us</a></p>`
+            `<p style="margin: 0.5rem 0;"><a href="${googleMapsUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">📍 Find us</a></p>`
             : ''}
         </div>
 
         ${(websiteUrl || facebookUrl || instagramUrl) ? 
           `<div style="margin: 1rem 0;">
-            ${websiteUrl ? `<a href="${formatUrl(websiteUrl)}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">🌐 Visit our Website</a>` : ''}
-            ${facebookUrl ? `<a href="${formatUrl(facebookUrl)}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">👥 Follow us on Facebook</a>` : ''}
-            ${instagramUrl ? `<a href="${formatUrl(instagramUrl)}" target="_blank" style="color: #666; text-decoration: underline;">📸 Follow us on Instagram</a>` : ''}
+            ${websiteUrl ? `<a href="${websiteUrl}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">🌐 Visit our Website</a>` : ''}
+            ${facebookUrl ? `<a href="${facebookUrl}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">👥 Follow us on Facebook</a>` : ''}
+            ${instagramUrl ? `<a href="${instagramUrl}" target="_blank" style="color: #666; text-decoration: underline;">📸 Follow us on Instagram</a>` : ''}
           </div>`
           : ''}
       </div>
