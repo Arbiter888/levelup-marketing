@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { nanoid } from 'https://esm.sh/nanoid@5.0.4'
-import * as QRCode from 'https://esm.sh/qrcode@1.5.3'
+import QRCode from 'https://esm.sh/qrcode@1.5.3'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -43,15 +43,8 @@ serve(async (req) => {
     
     let qrCodeImage;
     try {
-      qrCodeImage = await QRCode.toDataURL(qrCodeDataString, {
-        errorCorrectionLevel: 'H',
-        type: 'image/png',
-        margin: 1,
-        width: 300,
-        rendererOpts: {
-          quality: 0.92
-        }
-      });
+      // Use toDataURL without canvas-specific options
+      qrCodeImage = await QRCode.toDataURL(qrCodeDataString);
       console.log('QR code generated successfully');
     } catch (qrError) {
       console.error('Error generating QR code:', qrError);
