@@ -1,89 +1,52 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-
-interface EmailList {
-  id: string;
-  name: string;
-  description: string | null;
-  created_at: string;
-}
+import { CreateListDialog } from "@/components/email/CreateListDialog";
+import { EmailListCard } from "@/components/email/EmailListCard";
 
 export default function EmailListsPage() {
-  const [emailLists, setEmailLists] = useState<EmailList[]>([]);
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const { data: lists, isLoading, refetch } = useQuery({
+    queryKey: ["emailLists"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("email_lists")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-  useEffect(() => {
-    fetchEmailLists();
-  }, []);
-
-  const fetchEmailLists = async () => {
-    const { data: lists, error } = await supabase
-      .from("email_lists")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch email lists",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setEmailLists(lists);
-  };
+      if (error) throw error;
+      return data;
+    },
+  });
 
   return (
-    <div className="container mx-auto py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Email Lists</h1>
-        <Button onClick={() => navigate("/dashboard/lists/new")}>
-          <Plus className="mr-2 h-4 w-4" /> Create New List
-        </Button>
-      </div>
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8">Email Lists</h1>
+        
+        <div className="mb-8">
+          <CreateListDialog onListCreated={refetch} />
+        </div>
 
-      <div className="grid gap-4">
-        {emailLists.map((list) => (
-          <div
-            key={list.id}
-            className="bg-white p-6 rounded-lg shadow-sm border hover:border-primary/50 transition-colors"
-          >
-            <h3 className="text-xl font-semibold mb-2">{list.name}</h3>
-            {list.description && (
-              <p className="text-muted-foreground mb-4">{list.description}</p>
-            )}
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                onClick={() => navigate(`/dashboard/lists/${list.id}`)}
-              >
-                View Contacts
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => navigate(`/dashboard/lists/${list.id}/send`)}
-              >
-                Send Email
-              </Button>
-            </div>
+        {isLoading ? (
+          <div className="space-y-4">
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="h-32 bg-gray-100 animate-pulse rounded-lg" />
+            ))}
           </div>
-        ))}
-
-        {emailLists.length === 0 && (
-          <div className="text-center py-12 bg-muted/20 rounded-lg">
-            <h3 className="text-xl font-semibold mb-2">No Email Lists Yet</h3>
-            <p className="text-muted-foreground mb-4">
-              Create your first email list to get started
-            </p>
-            <Button onClick={() => navigate("/dashboard/lists/new")}>
-              <Plus className="mr-2 h-4 w-4" /> Create New List
-            </Button>
+        ) : (
+          <div className="space-y-4">
+            {lists?.map((list) => (
+              <EmailListCard
+                key={list.id}
+                list={list}
+                onContactsUploaded={refetch}
+              />
+            ))}
+            {lists?.length === 0 && (
+              <p className="text-center text-gray-600">
+                No email lists yet. Create your first list to get started!
+              </p>
+            )}
           </div>
         )}
       </div>
