@@ -3,6 +3,8 @@ import { EmailContent } from "../email/EmailContent";
 import { nanoid } from "nanoid";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Copy } from "lucide-react";
 
 interface EmailPreviewStepProps {
   emailCopy: string;
@@ -56,27 +58,16 @@ export const EmailPreviewStep = ({
       }
 
       const code = uniqueCode || nanoid(8);
-      const emailHtml = `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <div style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 30px;">
-            <h2 style="color: #E94E87; margin-bottom: 20px; text-align: center;">Your Special Offer</h2>
-            
-            <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #E94E87;">
-              <p style="font-size: 18px; color: #E94E87; margin-bottom: 10px; text-align: center;">${uniqueReward}</p>
-              <p style="font-size: 16px; color: #333; text-align: center; margin-top: 15px;">
-                Redemption Code: <strong style="color: #E94E87;">${code}</strong>
-              </p>
-            </div>
-            
-            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-              <p style="color: #666; font-size: 14px; text-align: center;">
-                Present this code during your visit to claim your reward.<br>
-                Valid for dine-in only.
-              </p>
-            </div>
-          </div>
-        </div>
-      `;
+      const emailHtml = localStorage.getItem('lastGeneratedHtmlEmail');
+      
+      if (!emailHtml) {
+        toast({
+          title: "Missing email HTML",
+          description: "Please generate the email first.",
+          variant: "destructive",
+        });
+        return;
+      }
 
       const { error } = await supabase.functions.invoke('send-email', {
         body: {
@@ -102,15 +93,50 @@ export const EmailPreviewStep = ({
     }
   };
 
+  const copyHtmlToClipboard = async () => {
+    const htmlEmail = localStorage.getItem('lastGeneratedHtmlEmail');
+    if (htmlEmail) {
+      try {
+        await navigator.clipboard.writeText(htmlEmail);
+        toast({
+          title: "Copied!",
+          description: "Email HTML copied to clipboard",
+        });
+      } catch (err) {
+        toast({
+          title: "Error",
+          description: "Failed to copy HTML. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } else {
+      toast({
+        title: "No HTML Available",
+        description: "Please generate the email first.",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (!emailCopy) return null;
 
   return (
     <div className="space-y-4">
-      <EmailContent emailCopy={emailCopy} />
-      <EmailPreviewButton 
-        onPreviewEmail={handlePreviewEmail} 
-        isGenerating={isGenerating} 
-      />
+      <EmailContent emailCopy={emailCopy} businessName={restaurantName} />
+      <div className="flex gap-2">
+        <EmailPreviewButton 
+          onPreviewEmail={handlePreviewEmail} 
+          isGenerating={isGenerating} 
+        />
+        <Button
+          onClick={copyHtmlToClipboard}
+          variant="outline"
+          className="flex items-center gap-2"
+        >
+          <Copy className="h-4 w-4" />
+          Copy Email HTML
+        </Button>
+      </div>
     </div>
   );
 };

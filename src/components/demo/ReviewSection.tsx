@@ -121,6 +121,9 @@ export const ReviewSection = ({
       
       setEmailCopy(data.emailCopy);
       setRewardCode(data.uniqueCode);
+      // Store the HTML version in localStorage
+      localStorage.setItem('lastGeneratedHtmlEmail', data.htmlEmail);
+      
       toast({
         title: "✅ Email Generated!",
         description: "Your email has been professionally crafted.",
