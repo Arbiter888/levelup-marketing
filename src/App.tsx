@@ -7,9 +7,8 @@ import CreateReviewPage from "./pages/restaurants/create-review-page";
 import ReviewPagePreview from "./pages/restaurants/review-page-preview";
 import LoginPage from "./pages/auth/LoginPage";
 import EmailListsPage from "./pages/dashboard/EmailListsPage";
-import { AuthProvider } from "./components/auth/AuthProvider";
+import { AuthProvider, useAuth } from "./components/auth/AuthProvider";
 import { Toaster } from "./components/ui/toaster";
-import { useAuth } from "./components/auth/AuthProvider";
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
