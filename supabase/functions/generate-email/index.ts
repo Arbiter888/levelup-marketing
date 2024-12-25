@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { nanoid } from 'https://esm.sh/nanoid@5.0.4'
-import QRCode from 'https://esm.sh/qrcode@1.5.3'
+import * as QRCode from 'https://esm.sh/qrcode@1.5.3'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -43,8 +43,15 @@ serve(async (req) => {
     
     let qrCodeImage;
     try {
-      // Use toDataURL without canvas-specific options
-      qrCodeImage = await QRCode.toDataURL(qrCodeDataString);
+      qrCodeImage = await QRCode.toDataURL(qrCodeDataString, {
+        errorCorrectionLevel: 'H',
+        type: 'image/png',
+        margin: 1,
+        width: 300,
+        rendererOpts: {
+          quality: 0.92
+        }
+      });
       console.log('QR code generated successfully');
     } catch (qrError) {
       console.error('Error generating QR code:', qrError);
@@ -85,25 +92,13 @@ serve(async (req) => {
     })
 
     const data = await response.json()
-    const plainTextContent = data.choices[0].message.content;
     
-    // Create HTML version of the email
-    let htmlEmail = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>${restaurantName} - Special Offer</title>
-        </head>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333333; max-width: 600px; margin: 0 auto; padding: 20px;">
-          ${plainTextContent.split('\n\n').map(paragraph => 
-            `<p style="margin-bottom: 1rem;">${paragraph}</p>`
-          ).join('')}
-    `;
+    let emailCopy = '<div style="margin-bottom: 2rem; line-height: 1.6; color: #333333;">';
+    emailCopy += data.choices[0].message.content.replace(/\n/g, '<br>');
+    emailCopy += '</div>';
 
     if (uniqueReward) {
-      htmlEmail += `
+      emailCopy += `
         <div style="margin: 2rem 0; padding: 1rem; background-color: #f8f9fa; border-radius: 8px; text-align: center;">
           <p style="color: #E94E87; font-weight: bold; margin-bottom: 0.5rem;">Special Reward for Your Next Visit!</p>
           <p style="margin: 0;">${uniqueReward}</p>
@@ -117,47 +112,45 @@ serve(async (req) => {
     }
 
     if (promoPhotos?.length > 0) {
-      htmlEmail += `
-        <div style="margin: 2rem 0; text-align: center;">
-          ${promoPhotos.map((photo: string) => 
-            `<img src="${photo}" alt="Products at ${restaurantName}" style="max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px;">`
-          ).join('')}
-        </div>
-      `;
+      emailCopy += '\n\n<div style="margin: 2rem 0; text-align: center;">';
+      emailCopy += promoPhotos.map((photo: string) => 
+        `<img src="${photo}" alt="Products at ${restaurantName}" style="max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px;">`
+      ).join('\n');
+      emailCopy += '</div>';
     }
 
-    // Add footer with contact information
-    htmlEmail += `
-        <div style="background-color: #f8f9fa; border-radius: 8px; padding: 1.5rem; margin-top: 2rem;">
-          <h3 style="color: #333; margin: 0 0 1rem 0; font-size: 1.5rem;">${restaurantName}</h3>
-          
-          <div style="margin: 0.5rem 0;">
-            ${phoneNumber ? 
-              `<p style="margin: 0.5rem 0;"><a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">📞 ${phoneNumber}</a></p>` 
-              : ''}
-            ${googleMapsUrl ? 
-              `<p style="margin: 0.5rem 0;"><a href="${googleMapsUrl}" target="_blank" style="color: #E94E87; text-decoration: none;">📍 Find us</a></p>`
-              : ''}
-          </div>
+    // Fix URL handling in the contact section
+    const formatUrl = (url: string) => {
+      if (!url) return '';
+      // Remove any trailing colons and ensure proper URL format
+      return url.replace(/:+$/, '').replace(/([^:])\/\/+/g, '$1/');
+    };
 
-          ${(websiteUrl || facebookUrl || instagramUrl) ? 
-            `<div style="margin: 1rem 0;">
-              ${websiteUrl ? `<a href="${websiteUrl}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">🌐 Visit our Website</a>` : ''}
-              ${facebookUrl ? `<a href="${facebookUrl}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">👥 Follow us on Facebook</a>` : ''}
-              ${instagramUrl ? `<a href="${instagramUrl}" target="_blank" style="color: #666; text-decoration: underline;">📸 Follow us on Instagram</a>` : ''}
-            </div>`
+    emailCopy += `
+      <div style="background-color: #f8f9fa; border-radius: 8px; padding: 1.5rem; margin-top: 2rem;">
+        <h3 style="color: #333; margin: 0 0 1rem 0; font-size: 1.5rem;">${restaurantName}</h3>
+        
+        <div style="margin: 0.5rem 0;">
+          ${phoneNumber ? 
+            `<p style="margin: 0.5rem 0;"><a href="tel:${phoneNumber}" style="color: #E94E87; text-decoration: none;">📞 ${phoneNumber}</a></p>` 
+            : ''}
+          ${googleMapsUrl ? 
+            `<p style="margin: 0.5rem 0;"><a href="${formatUrl(googleMapsUrl)}" target="_blank" style="color: #E94E87; text-decoration: none;">📍 Find us</a></p>`
             : ''}
         </div>
-      </body>
-    </html>
+
+        ${(websiteUrl || facebookUrl || instagramUrl) ? 
+          `<div style="margin: 1rem 0;">
+            ${websiteUrl ? `<a href="${formatUrl(websiteUrl)}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">🌐 Visit our Website</a>` : ''}
+            ${facebookUrl ? `<a href="${formatUrl(facebookUrl)}" target="_blank" style="color: #666; text-decoration: underline; margin-right: 1rem;">👥 Follow us on Facebook</a>` : ''}
+            ${instagramUrl ? `<a href="${formatUrl(instagramUrl)}" target="_blank" style="color: #666; text-decoration: underline;">📸 Follow us on Instagram</a>` : ''}
+          </div>`
+          : ''}
+      </div>
     `;
 
     return new Response(
-      JSON.stringify({ 
-        emailCopy: plainTextContent,
-        htmlEmail,
-        uniqueCode 
-      }),
+      JSON.stringify({ emailCopy, uniqueCode }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
     )
   } catch (error) {

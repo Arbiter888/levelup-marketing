@@ -1,10 +1,9 @@
 interface EmailContentProps {
   emailCopy: string;
   businessName?: string;
-  htmlContent?: string;
 }
 
-export const EmailContent = ({ emailCopy, businessName, htmlContent }: EmailContentProps) => {
+export const EmailContent = ({ emailCopy, businessName }: EmailContentProps) => {
   const subject = businessName ? 
     `Special Offer from ${businessName}` : 
     "Special Offer for You";
@@ -16,14 +15,10 @@ export const EmailContent = ({ emailCopy, businessName, htmlContent }: EmailCont
         <div className="p-4 bg-gray-50 rounded-lg">
           <p className="font-medium">Subject: {subject}</p>
         </div>
-        {htmlContent ? (
-          <div 
-            className="email-preview"
-            dangerouslySetInnerHTML={{ __html: htmlContent }}
-          />
-        ) : (
-          <div className="whitespace-pre-wrap">{emailCopy}</div>
-        )}
+        <div 
+          className="email-preview"
+          dangerouslySetInnerHTML={{ __html: emailCopy }}
+        />
       </div>
     </div>
   );
