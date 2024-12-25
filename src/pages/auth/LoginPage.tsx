@@ -2,18 +2,21 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
 
   useEffect(() => {
     // Check if user is already logged in
     supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
-        navigate("/dashboard");
+        // Navigate back to the previous page or dashboard
+        const from = location.state?.from?.pathname || "/dashboard";
+        navigate(from);
         if (event === 'SIGNED_IN') {
           toast({
             title: "Welcome!",
@@ -22,7 +25,7 @@ export default function LoginPage() {
         }
       }
     });
-  }, [navigate, toast]);
+  }, [navigate, location, toast]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-[#FFE5ED] to-[#FFD5E2]/20 flex items-center justify-center p-4">

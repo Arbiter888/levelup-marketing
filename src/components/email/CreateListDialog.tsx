@@ -6,6 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export const CreateListDialog = ({ onListCreated }: { onListCreated: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +15,14 @@ export const CreateListDialog = ({ onListCreated }: { onListCreated: () => void 
   const [description, setDescription] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect to login if not authenticated
+  if (!user) {
+    navigate("/auth/login");
+    return null;
+  }
 
   const handleCreateList = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +39,11 @@ export const CreateListDialog = ({ onListCreated }: { onListCreated: () => void 
     try {
       const { error } = await supabase
         .from("email_lists")
-        .insert([{ name, description }]);
+        .insert({
+          name,
+          description,
+          user_id: user.id
+        });
 
       if (error) throw error;
 
